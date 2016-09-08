@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Refrigerator</string>
+
+    <string name="title_section1">냉동고</string>
+    <string name="title_section2">냉장고</string>
+    <string name="title_section3">장바구니</string>
+
+    <string name="hello_world">Hello world!</string>
+
+    <string name="action_settings">Settings</string>
+</resources>
