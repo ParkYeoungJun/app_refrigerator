@@ -1,7 +1,9 @@
 package com.example.younghyeon.test0901;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
@@ -24,12 +26,14 @@ public class FoodInputActivity extends Activity {
     Button cancelBtn;
     Button okBtn;
 
+    int position;
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.foodinput_activity);
 
-        //extra 추가
-
+        Intent it = getIntent();
+        position = it.getExtras().getInt("position");
 
         groupText = (TextView) findViewById(R.id.groupText);
         nameEditText = (EditText) findViewById(R.id.nameEditText);
@@ -45,7 +49,12 @@ public class FoodInputActivity extends Activity {
         okBtn = (Button) findViewById(R.id.okBtn);
 
         //listener 추가
+        groupBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
 
+            }
+        });
 
 
     }

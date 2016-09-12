@@ -1,19 +1,13 @@
 package com.example.younghyeon.test0901;
 
-import java.util.ArrayList;
-import java.util.Locale;
-
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -21,11 +15,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -37,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+
     SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static final int REQUEST_CODE_FOOD_INPUT = 1001;
 
     final int STATE_FREEZER = 0;
     final int STATE_REFRIGERATOR = 1;
@@ -83,6 +80,11 @@ public class MainActivity extends AppCompatActivity {
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+
+                Intent intent = new Intent(MainActivity.this, FoodInputActivity.class);
+                intent.putExtra("position", mViewPager.getCurrentItem());
+                startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
+
 
 
                 int state = mViewPager.getCurrentItem();

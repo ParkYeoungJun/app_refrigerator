@@ -39,18 +39,12 @@
             android:gravity="center"
             android:textSize="25dp"
             android:layout_weight="0.39" />
-        <TextView
-            android:layout_width="wrap_content"
+
+        <Spinner
+            android:layout_width="89dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:id="@+id/groupText"
+            android:id="@+id/groupSpinner"
             android:layout_weight="0.61" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="선택"
-            android:id="@+id/groupBtn" />
 
     </LinearLayout>
 
@@ -94,18 +88,13 @@
             android:textSize="25dp"
             android:text="구매일자"
             android:layout_weight="0.25" />
-        <TextView
-            android:layout_width="wrap_content"
+
+        <DatePicker
+            android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:id="@+id/purDateText"
-            android:layout_weight="0.75" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="선택"
-            android:id="@+id/purDateBtn" />
+            android:id="@+id/purDatePicker"
+            android:layout_weight="0.75"/>
+
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -121,18 +110,11 @@
             android:text="유통기한"
             android:textSize="25dp"
             android:layout_weight="0.25" />
-        <TextView
-            android:layout_width="wrap_content"
+        <DatePicker
+            android:layout_width="60dp"
             android:layout_height="match_parent"
-            android:gravity="center"
-            android:id="@+id/shelDateText"
-            android:layout_weight="0.75" />
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:gravity="center"
-            android:text="선택"
-            android:id="@+id/shelDateBtn" />
+            android:id="@+id/shelDatePicker"
+            android:layout_weight="0.75"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
