@@ -40,14 +40,14 @@
         jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="c69a7a0d221c9852dd7f22d066cde14f4e7c0229">
+        sha1="9c8e387182e506ebb9817ed9323f7caeca5eee4e">
         <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_8af66fd3c053ccb2ac0812a6e8daf821c3e02908\classes.dex" />
     </item>
     <item
         jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="428b189fe6b20e5acd61d2c4f136278920355505">
+        sha1="474d81ae585c22c14a6555bbd9e1fc08d91ac8ec">
         <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_0a4274e06f317e6d8429c9c483c933ea3d6948d8\classes.dex" />
     </item>
     <item

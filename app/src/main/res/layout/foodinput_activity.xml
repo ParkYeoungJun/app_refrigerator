@@ -67,12 +67,12 @@
             android:layout_height="match_parent"
             android:id="@+id/nameEditText"
             android:gravity="center"
-            android:layout_weight="0.64" />
-        <Button
-            android:layout_width="wrap_content"
+            android:layout_weight="0.43" />
+        <Spinner
+            android:layout_width="70dp"
             android:layout_height="match_parent"
-            android:text="선택"
-            android:id="@+id/nameBtn" />
+            android:id="@+id/nameSpinner"
+            android:layout_weight="0.20" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
@@ -89,10 +89,10 @@
             android:text="구매일자"
             android:layout_weight="0.25" />
 
-        <DatePicker
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:id="@+id/purDatePicker"
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/purDateBtn"
             android:layout_weight="0.75"/>
 
     </LinearLayout>
@@ -110,10 +110,10 @@
             android:text="유통기한"
             android:textSize="25dp"
             android:layout_weight="0.25" />
-        <DatePicker
-            android:layout_width="60dp"
-            android:layout_height="match_parent"
-            android:id="@+id/shelDatePicker"
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/shelDateBtn"
             android:layout_weight="0.75"/>
     </LinearLayout>
     <LinearLayout
