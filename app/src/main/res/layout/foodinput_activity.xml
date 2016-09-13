@@ -28,120 +28,120 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="25px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="분류"
             android:gravity="center"
             android:textSize="25dp"
-            android:layout_weight="0.39" />
+            android:layout_weight="0.32" />
 
         <Spinner
-            android:layout_width="89dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/groupSpinner"
-            android:layout_weight="0.61" />
+            android:layout_weight="0.68" />
 
     </LinearLayout>
 
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:text="식품명"
             android:gravity="center"
             android:textSize="25dp"
-            android:layout_weight="0.37" />
+            android:layout_weight="0.32" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/nameEditText"
             android:gravity="center"
-            android:layout_weight="0.43" />
+            android:layout_weight="0.30" />
         <Spinner
-            android:layout_width="70dp"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:id="@+id/nameSpinner"
-            android:layout_weight="0.20" />
+            android:layout_weight="0.38" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:textSize="25dp"
             android:text="구매일자"
-            android:layout_weight="0.25" />
+            android:layout_weight="0.32" />
 
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/purDateBtn"
-            android:layout_weight="0.75"/>
+            android:layout_weight="0.68"/>
 
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="유통기한"
             android:textSize="25dp"
-            android:layout_weight="0.25" />
+            android:layout_weight="0.32" />
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:id="@+id/shelDateBtn"
-            android:layout_weight="0.75"/>
+            android:layout_weight="0.68"/>
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:text="수량"
             android:textSize="25dp"
-            android:layout_weight="0.39" />
+            android:layout_weight="0.32" />
         <EditText
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:id="@+id/numText"
             android:hint="생략 가능"
-            android:layout_weight="0.27" />
+            android:layout_weight="0.68" />
     </LinearLayout>
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="30dp"
         android:layout_gravity="center_horizontal"
         android:layout_weight="0.10"
         android:weightSum="1">
@@ -149,19 +149,19 @@
     <LinearLayout
         android:orientation="horizontal"
         android:layout_width="match_parent"
-        android:layout_height="30px"
+        android:layout_height="0dp"
         android:layout_gravity="center_horizontal"
-        android:layout_weight="0.10"
+        android:layout_weight="0.15"
         android:weightSum="1">
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:layout_weight="0.50"
             android:id="@+id/cancelBtn"
             android:text="취소"/>
         <Button
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="match_parent"
             android:gravity="center"
             android:id="@+id/okBtn"
