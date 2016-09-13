@@ -1,6 +1,7 @@
 package com.example.younghyeon.test0901;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -8,8 +9,10 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import java.util.Calendar;
 
@@ -33,7 +36,10 @@ public class FoodInputActivity extends Activity {
     int tmp_arrayNum;
     String[] nameStr;
     String[] groupStr;
-    String[] shelStrArr;
+    String[] shelfStrArr;
+    int shelf_index1, shelf_index2, shelf_num;
+
+    Calendar purCalen, shelfCalen;
 
     ArrayAdapter<String> nameAdapter;
     ArrayAdapter<String> groupAdapter;
@@ -46,18 +52,19 @@ public class FoodInputActivity extends Activity {
         position = it.getExtras().getInt("position");
         if(position == 0)   //냉동실
         {
-            shelStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife0);
+            shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife0);
         }
         else if(position == 1)   //냉장실
         {
-            shelStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
+            shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
         }
 
-
         image_num = 0;
+        shelf_index1 = 0;
+        shelf_index2 = 0;
+        shelf_num = 0;
         group_str = "육류";
         name_str = "닭고기";
-
 
 
 
@@ -68,12 +75,12 @@ public class FoodInputActivity extends Activity {
         nameSpinner = (Spinner) findViewById(R.id.nameSpinner);
 
         purDateBtn = (Button) findViewById(R.id.purDateBtn);
-        Calendar calendar = Calendar.getInstance();
-        Log.e("분 : ",""+calendar.get(Calendar.YEAR));
-        purDateBtn.setText(calendar.get(Calendar.YEAR)+"년 "+calendar.get(Calendar.MONTH)+"월 "+calendar.get(Calendar.DAY_OF_MONTH)+"일");
+        purCalen = Calendar.getInstance();
+        Log.e("분 : ",""+purCalen.get(Calendar.YEAR));
+        purDateBtn.setText(purCalen.get(Calendar.YEAR)+"년 "+(purCalen.get(Calendar.MONTH)+1)+"월 "+ purCalen.get(Calendar.DAY_OF_MONTH)+"일");
 
         shelDateBtn = (Button) findViewById(R.id.shelDateBtn);
-
+        setShelfCalen();
 
         cancelBtn = (Button) findViewById(R.id.cancelBtn);
         okBtn = (Button) findViewById(R.id.okBtn);
@@ -90,7 +97,10 @@ public class FoodInputActivity extends Activity {
                 name_str = nameAdapter.getItem(i).toString();
                 nameEditText.setText(name_str);
                 nameEditText.setSelection(name_str.length());
-
+                shelf_index2 = i;
+                shelf_num = shelf_index1 + shelf_index2;
+                Log.e("good", shelfStrArr[shelf_num].toString());
+                setShelfCalen();
             }
 
             @Override
@@ -108,6 +118,37 @@ public class FoodInputActivity extends Activity {
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 tmp_arrayNum = R.array.spinnerArrayName0 + i;
                 Log.e("tmp_arrayNum : ", ""+tmp_arrayNum);
+                shelf_index2 = 0;
+                switch (i)
+                {
+                    case 0:
+                        shelf_index1 = 0;
+                        break;
+                    case 1:
+                        shelf_index1 = 5;
+                        break;
+                    case 2:
+                        shelf_index1 = 21;
+                        break;
+                    case 3:
+                        shelf_index1 = 30;
+                        break;
+                    case 4:
+                        shelf_index1 = 55;
+                        break;
+                    case 5:
+                        shelf_index1 = 75;
+                        break;
+                    case 6:
+                        shelf_index1 = 84;
+                        break;
+                    case 7:
+                        shelf_index1 = 92;
+                        break;
+                    default:
+                        break;
+                }
+                shelf_num = shelf_index1 + shelf_index2;
 
                 image_num = i;
                 group_str = groupAdapter.getItem(i).toString();
@@ -116,6 +157,12 @@ public class FoodInputActivity extends Activity {
                 nameSpinner.setAdapter(nameAdapter);
                 name_str = nameAdapter.getItem(0).toString();
                 nameEditText.setText(name_str);
+
+
+                Log.e("good", "q3 "+Integer.parseInt(shelfStrArr[shelf_num]));
+                setShelfCalen();
+
+
             }
 
             @Override
@@ -124,6 +171,22 @@ public class FoodInputActivity extends Activity {
             }
         });
 
+        purDateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(FoodInputActivity.this, purDateSetListener, purCalen.get(Calendar.YEAR),
+                        purCalen.get(Calendar.MONTH), purCalen.get(Calendar.DAY_OF_MONTH)).show();
+
+            }
+        });
+
+        shelDateBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                new DatePickerDialog(FoodInputActivity.this, shelfDateSetListener, shelfCalen.get(Calendar.YEAR),
+                        shelfCalen.get(Calendar.MONTH), shelfCalen.get(Calendar.DAY_OF_MONTH)).show();
+            }
+        });
 
 
 
@@ -145,5 +208,48 @@ public class FoodInputActivity extends Activity {
             }
         });
 
+    }
+
+    private DatePickerDialog.OnDateSetListener purDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stubs
+            purCalen.set(year, monthOfYear, dayOfMonth);
+            purDateBtn.setText(year+"년 "+(monthOfYear+1)+"월 "+ dayOfMonth+"일");
+            setShelfCalen();
+//            String msg = String.format("%d / %d / %d", year,monthOfYear+1, dayOfMonth);
+//            Toast.makeText(FoodInputActivity.this, msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+    private DatePickerDialog.OnDateSetListener shelfDateSetListener = new DatePickerDialog.OnDateSetListener() {
+        @Override
+        public void onDateSet(DatePicker view, int year, int monthOfYear,
+                              int dayOfMonth) {
+            // TODO Auto-generated method stub
+            Calendar tmp_Calen = Calendar.getInstance();
+            tmp_Calen.set(year, monthOfYear, dayOfMonth);
+            if(tmp_Calen.compareTo(purCalen) < 0)
+            {
+                Toast.makeText(FoodInputActivity.this, "구매일자 이전의 날짜는 선택하실 수 없습니다.", Toast.LENGTH_SHORT).show();
+            }
+            else
+            {
+                shelfCalen.set(year, monthOfYear, dayOfMonth);
+                shelDateBtn.setText(year+"년 "+(monthOfYear+1)+"월 "+ dayOfMonth+"일");
+            }
+//            String msg = String.format("%d / %d / %d", year,monthOfYear+1, dayOfMonth);
+//            Toast.makeText(FoodInputActivity.this, msg, Toast.LENGTH_SHORT).show();
+        }
+    };
+
+
+    void setShelfCalen()
+    {
+        shelfCalen = Calendar.getInstance(purCalen.getTimeZone());
+        shelfCalen.setTime(purCalen.getTime());
+        shelfCalen.add(Calendar.DATE, Integer.parseInt(shelfStrArr[shelf_num]));
+        shelDateBtn.setText(shelfCalen.get(Calendar.YEAR)+"년 "+(shelfCalen.get(Calendar.MONTH)+1)+"월 "+ shelfCalen.get(Calendar.DAY_OF_MONTH)+"일");
     }
 }
