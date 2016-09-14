@@ -1,6 +1,7 @@
 package com.example.younghyeon.test0901;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -17,8 +18,16 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -61,6 +70,8 @@ public class MainActivity extends AppCompatActivity {
     public static GridView gridViewBasket;
 
     ImageButton plusButton;
+    FoodItem item;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -87,36 +98,35 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("position", mViewPager.getCurrentItem());
                 startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
 
-
-                state = mViewPager.getCurrentItem();
-                if (state==STATE_FREEZER) {
-                    if (foodList1 == null){
-                        foodList1 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
-                    foodList1.add(item);
-                    mAdapter1.foodArrayList = foodList1;
-                    mAdapter1.notifyDataSetChanged();
-                }
-                else if (state==STATE_REFRIGERATOR) {
-                    if (foodList2 == null){
-                        foodList2 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
-                    foodList2.add(item);
-                    mAdapter2.foodArrayList = foodList2;
-                    mAdapter2.notifyDataSetChanged();
-                }
-                else if (state==STATE_BASKET){
-                    if (foodList3 == null){
-                        foodList3 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
-                    foodList3.add(item);
-                    mAdapter3.foodArrayList = foodList3;
-                    mAdapter3.notifyDataSetChanged();
-                }
-                i++;
+//                state = mViewPager.getCurrentItem();
+//                if (state==STATE_FREEZER) {
+//                    if (foodList1 == null){
+//                        foodList1 = new ArrayList<FoodItem>();
+//                    }
+//                    FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
+//                    foodList1.add(item);
+//                    mAdapter1.foodArrayList = foodList1;
+//                    mAdapter1.notifyDataSetChanged();
+//                }
+//                else if (state==STATE_REFRIGERATOR) {
+//                    if (foodList2 == null){
+//                        foodList2 = new ArrayList<FoodItem>();
+//                    }
+//                    FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
+//                    foodList2.add(item);
+//                    mAdapter2.foodArrayList = foodList2;
+//                    mAdapter2.notifyDataSetChanged();
+//                }
+//                else if (state==STATE_BASKET){
+//                    if (foodList3 == null){
+//                        foodList3 = new ArrayList<FoodItem>();
+//                    }
+//                    FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
+//                    foodList3.add(item);
+//                    mAdapter3.foodArrayList = foodList3;
+//                    mAdapter3.notifyDataSetChanged();
+//                }
+//                i++;
             }
         });
     }
@@ -270,27 +280,33 @@ public class MainActivity extends AppCompatActivity {
             String name = intent.getStringExtra("name");
             String purDate = intent.getStringExtra("purDate");
             String shelfLife = intent.getStringExtra("shelfLife");
-            String num_str = intent.getStringExtra("num");
+            int num = intent.getIntExtra("num", 0);
             int image_num = intent.getIntExtra("image_num", 7);
             int position = intent.getIntExtra("position", 0);
+            int d_day = intent.getIntExtra("d_day", 0);
+
+            Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
 
             if (position == STATE_FREEZER) {
                 if (foodList1 == null){
                     foodList1 = new ArrayList<FoodItem>();
                 }
 
-
-
-                FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
+                item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
                 foodList1.add(item);
                 mAdapter1.foodArrayList = foodList1;
                 mAdapter1.notifyDataSetChanged();
+
+                Log.e("jsonerr", "write_json100 : postFood");
+                postFood("http://52.78.88.182/insertFood.php");
+
+
             }
             else if (position == STATE_REFRIGERATOR) {
                 if (foodList2 == null){
                     foodList2 = new ArrayList<FoodItem>();
                 }
-                FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
+                FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada, 0, position);
                 foodList2.add(item);
                 mAdapter2.foodArrayList = foodList2;
                 mAdapter2.notifyDataSetChanged();
@@ -299,49 +315,174 @@ public class MainActivity extends AppCompatActivity {
                 if (foodList3 == null){
                     foodList3 = new ArrayList<FoodItem>();
                 }
-                FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
+                FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil, 0, position);
                 foodList3.add(item);
                 mAdapter3.foodArrayList = foodList3;
                 mAdapter3.notifyDataSetChanged();
             }
-            i++;
 
 
 
-            String time = intent.getStringExtra("time");
-            String message = intent.getStringExtra("message");
-            int selectedWeather = intent.getIntExtra("weather", 0);
-
-            if (message != null) {
-                Toast toast = Toast.makeText(getBaseContext(), "time : " + time + ", message : " + message + ", selectedWeather : " + selectedWeather, Toast.LENGTH_LONG);
-                toast.show();
-                // 일정 추가 저장시 토스트 메시지 띄우는 거
-
-
-                ScheduleListItem aItem = new ScheduleListItem(time, message);
-
-                if (outScheduleList == null) {
-                    outScheduleList = new ArrayList();
-                }
-                outScheduleList.add(aItem);
-
-                monthViewAdapter.putSchedule(curPosition, outScheduleList);
-
-                scheduleAdapter.scheduleList = outScheduleList;
-                scheduleAdapter.notifyDataSetChanged();
-            }
+//            String time = intent.getStringExtra("time");
+//            String message = intent.getStringExtra("message");
+//            int selectedWeather = intent.getIntExtra("weather", 0);
+//
+//            if (message != null) {
+//                Toast toast = Toast.makeText(getBaseContext(), "time : " + time + ", message : " + message + ", selectedWeather : " + selectedWeather, Toast.LENGTH_LONG);
+//                toast.show();
+//                // 일정 추가 저장시 토스트 메시지 띄우는 거
+//
+//
+//                ScheduleListItem aItem = new ScheduleListItem(time, message);
+//
+//                if (outScheduleList == null) {
+//                    outScheduleList = new ArrayList();
+//                }
+//                outScheduleList.add(aItem);
+//
+//                monthViewAdapter.putSchedule(curPosition, outScheduleList);
+//
+//                scheduleAdapter.scheduleList = outScheduleList;
+//                scheduleAdapter.notifyDataSetChanged();
+//            }
         }
-        else if (requestCode == REQUEST_CODE_SCHEDULE_REMOVE){
-            if (intent == null) {
-                return;
-            }
-
-            // 이걸 하면 Calendar getView가 콜이 되는건가 암튼 화면 업데이트 할 수 있다.
-            monthViewAdapter.notifyDataSetChanged();
-            scheduleAdapter.notifyDataSetChanged();
-        }
+//        else if (requestCode == REQUEST_CODE_SCHEDULE_REMOVE){
+//            if (intent == null) {
+//                return;
+//            }
+//
+//            // 이걸 하면 Calendar getView가 콜이 되는건가 암튼 화면 업데이트 할 수 있다.
+//            monthViewAdapter.notifyDataSetChanged();
+//            scheduleAdapter.notifyDataSetChanged();
+//        }
 
     }
 
+    int getDrawableId(int _imageNum)
+    {
+        int ret = 7;
+        switch(_imageNum)
+        {
+            case 0:
+                ret = R.drawable.meat_icon;
+                break;
+            case 1:
+                ret = R.drawable.fish_icon;
+                break;
+            case 2:
+                ret = R.drawable.seafood_icon;
+                break;
+            case 3:
+                ret = R.drawable.vegetable_icon;
+                break;
+            case 4:
+                ret = R.drawable.fruit_icon;
+                break;
+            case 5:
+                ret = R.drawable.dairy_icon;
+                break;
+            case 6:
+                ret = R.drawable.beverage_icon;
+                break;
+            case 7:
+                ret = R.drawable.etc_icon;
+                break;
+            default:
+                break;
+        }
+        return ret;
+    }
+
+
+    public void postFood(String url){
+        class postFoodJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    String uri = params[0];
+                    JSONObject jsonObj = new JSONObject();
+                    jsonObj.put("group", item.getGroup());
+                    jsonObj.put("name", item.getName());
+                    jsonObj.put("purchase_date", item.getDate());
+                    jsonObj.put("image_num", item.getImage());
+                    jsonObj.put("shelf_life", item.getShelf_life());
+                    jsonObj.put("num", item.getNum());
+                    jsonObj.put("position", item.getPosition());
+
+
+                    BufferedWriter bufferedWriter = null;
+//                BufferedReader bufferedReader = null;
+                    Log.e("jsonerr", "write_json0 : " + jsonObj.toString());
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+                    Log.e("jsonerr", "write_json1 : " + jsonObj.toString());
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
+
+                    String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonObj.toString();
+
+                    OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
+//                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령
+                    wr.write(data);
+//                    Log.e("jsonerr", "write() : ");
+
+                    wr.flush();
+
+                    //OutputStream os = con.getOutputStream();
+                    Log.e("jsonerr", "write_json6 : " + jsonObj.toString());
+                    //BufferedWriter writer = new BufferedWriter(
+                    //      new OutputStreamWriter(os, "UTF-8"));
+                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
+                    //os.write(jsonObj.toString().getBytes());
+
+//                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
+//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+//                    bufferedWriter.write(jsonObj);
+                    //bufferedWriter.write(jsonObj.toString());
+                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
+//                    String json;
+//                    while((json = bufferedReader.readLine())!= null){
+//                        sb.append(json+"\n");
+//                    }
+                    Log.e("jsonerr", "before read");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    Log.e("jsonerr", "ing read");
+                    String line=null;
+                    Log.e("jsonerr", "ing read");
+                    while((line=reader.readLine())!=null){
+                        //서버응답값을 String 형태로 추가함
+                        Log.e("jsonerr", "Input Read : " + line+"\n");
+                    }
+                    Log.e("jsonerr", "after read");
+
+
+
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+
+
+
+            }
+
+
+            @Override
+            protected void onPostExecute(String result){
+                Log.e("jsonerr", "result : "+ result);
+//                myJSON=result;
+//                showList();
+            }
+        }
+        postFoodJSON g = new postFoodJSON();
+        g.execute(url);
+    }
 
 }

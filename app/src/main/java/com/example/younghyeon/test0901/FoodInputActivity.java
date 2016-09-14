@@ -15,6 +15,7 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by YOUNGHYEON on 2016-09-03.
@@ -76,6 +77,11 @@ public class FoodInputActivity extends Activity {
 
         purDateBtn = (Button) findViewById(R.id.purDateBtn);
         purCalen = Calendar.getInstance();
+        purCalen.set(Calendar.HOUR_OF_DAY, 0);
+        purCalen.set(Calendar.MINUTE, 0);
+        purCalen.set(Calendar.SECOND, 0);
+        purCalen.set(Calendar.MILLISECOND, 0);
+
         Log.e("분 : ",""+purCalen.get(Calendar.YEAR));
         purDateBtn.setText(purCalen.get(Calendar.YEAR)+"년 "+(purCalen.get(Calendar.MONTH)+1)+"월 "+ purCalen.get(Calendar.DAY_OF_MONTH)+"일");
 
@@ -204,18 +210,43 @@ public class FoodInputActivity extends Activity {
             public void onClick(View view) {
                 //extra 추가
                 Intent intent = new Intent();
+                int num = 0;
+                try
+                {
+                    if(numEditText.getText().toString().compareTo("") != 0)
+                    {
+                        num = Integer.parseInt(numEditText.getText().toString());
+                    }
 
+                    if(nameEditText.getText().toString().compareTo("") == 0)
+                    {
+                        Toast.makeText(FoodInputActivity.this, "식품명을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                    }
+                    else
+                    {
+                        intent.putExtra("group", group_str);
+                        intent.putExtra("name", nameEditText.getText().toString());
+                        intent.putExtra("purDate", purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH)));
+                        intent.putExtra("shelfLife", shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH)));
+                        intent.putExtra("num", num);
+                        intent.putExtra("image_num", image_num);
+                        intent.putExtra("position", position);
+                        long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - purCalen.getTimeInMillis()));
+                        intent.putExtra("d_day", diff);
 
-                intent.putExtra("group", group_str);
-                intent.putExtra("name", nameEditText.getText());
-                intent.putExtra("purDate", purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH)+1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH)));
-                intent.putExtra("shelfLife", shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH)+1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH)));
-                intent.putExtra("num", numEditText.getText());
-                intent.putExtra("image_num", image_num);
-                intent.putExtra("position", position);
+                        setResult(RESULT_OK, intent);
+                        finish();
+                    }
+                }
+                catch(NumberFormatException e)
+                {
+                    Toast.makeText(FoodInputActivity.this, "수량은 숫자만 가능합니다.", Toast.LENGTH_SHORT).show();
+                }
+                catch(Exception e)
+                {
+                    e.printStackTrace();
+                }
 
-                setResult(RESULT_OK, intent);
-                finish();
             }
         });
 
@@ -250,6 +281,9 @@ public class FoodInputActivity extends Activity {
                 shelfCalen.set(year, monthOfYear, dayOfMonth);
                 shelDateBtn.setText(year+"년 "+(monthOfYear+1)+"월 "+ dayOfMonth+"일");
             }
+//            long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - purCalen.getTimeInMillis()));
+//            Log.e("good", "D-Day : " + diff);
+
 //            String msg = String.format("%d / %d / %d", year,monthOfYear+1, dayOfMonth);
 //            Toast.makeText(FoodInputActivity.this, msg, Toast.LENGTH_SHORT).show();
         }
