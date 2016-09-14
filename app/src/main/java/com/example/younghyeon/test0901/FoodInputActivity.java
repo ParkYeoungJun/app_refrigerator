@@ -203,7 +203,18 @@ public class FoodInputActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //extra 추가
+                Intent intent = new Intent();
 
+
+                intent.putExtra("group", group_str);
+                intent.putExtra("name", nameEditText.getText());
+                intent.putExtra("purDate", purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH)+1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH)));
+                intent.putExtra("shelfLife", shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH)+1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH)));
+                intent.putExtra("num", numEditText.getText());
+                intent.putExtra("image_num", image_num);
+                intent.putExtra("position", position);
+
+                setResult(RESULT_OK, intent);
                 finish();
             }
         });

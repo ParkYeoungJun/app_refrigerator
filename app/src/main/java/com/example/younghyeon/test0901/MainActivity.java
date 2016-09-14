@@ -17,6 +17,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Locale;
@@ -45,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
      */
     ViewPager mViewPager;
     int i = 1;
+    int state;
     ArrayList foodList1;
     ArrayList foodList2;
     ArrayList foodList3;
@@ -86,8 +88,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
 
 
-
-                int state = mViewPager.getCurrentItem();
+                state = mViewPager.getCurrentItem();
                 if (state==STATE_FREEZER) {
                     if (foodList1 == null){
                         foodList1 = new ArrayList<FoodItem>();
@@ -256,4 +257,91 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == REQUEST_CODE_FOOD_INPUT) {
+            if (intent == null) {
+                return;
+            }
+
+            String group = intent.getStringExtra("group");
+            String name = intent.getStringExtra("name");
+            String purDate = intent.getStringExtra("purDate");
+            String shelfLife = intent.getStringExtra("shelfLife");
+            String num_str = intent.getStringExtra("num");
+            int image_num = intent.getIntExtra("image_num", 7);
+            int position = intent.getIntExtra("position", 0);
+
+            if (position == STATE_FREEZER) {
+                if (foodList1 == null){
+                    foodList1 = new ArrayList<FoodItem>();
+                }
+
+
+
+                FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
+                foodList1.add(item);
+                mAdapter1.foodArrayList = foodList1;
+                mAdapter1.notifyDataSetChanged();
+            }
+            else if (position == STATE_REFRIGERATOR) {
+                if (foodList2 == null){
+                    foodList2 = new ArrayList<FoodItem>();
+                }
+                FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
+                foodList2.add(item);
+                mAdapter2.foodArrayList = foodList2;
+                mAdapter2.notifyDataSetChanged();
+            }
+            else if (position == STATE_BASKET){
+                if (foodList3 == null){
+                    foodList3 = new ArrayList<FoodItem>();
+                }
+                FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
+                foodList3.add(item);
+                mAdapter3.foodArrayList = foodList3;
+                mAdapter3.notifyDataSetChanged();
+            }
+            i++;
+
+
+
+            String time = intent.getStringExtra("time");
+            String message = intent.getStringExtra("message");
+            int selectedWeather = intent.getIntExtra("weather", 0);
+
+            if (message != null) {
+                Toast toast = Toast.makeText(getBaseContext(), "time : " + time + ", message : " + message + ", selectedWeather : " + selectedWeather, Toast.LENGTH_LONG);
+                toast.show();
+                // 일정 추가 저장시 토스트 메시지 띄우는 거
+
+
+                ScheduleListItem aItem = new ScheduleListItem(time, message);
+
+                if (outScheduleList == null) {
+                    outScheduleList = new ArrayList();
+                }
+                outScheduleList.add(aItem);
+
+                monthViewAdapter.putSchedule(curPosition, outScheduleList);
+
+                scheduleAdapter.scheduleList = outScheduleList;
+                scheduleAdapter.notifyDataSetChanged();
+            }
+        }
+        else if (requestCode == REQUEST_CODE_SCHEDULE_REMOVE){
+            if (intent == null) {
+                return;
+            }
+
+            // 이걸 하면 Calendar getView가 콜이 되는건가 암튼 화면 업데이트 할 수 있다.
+            monthViewAdapter.notifyDataSetChanged();
+            scheduleAdapter.notifyDataSetChanged();
+        }
+
+    }
+
+
 }
