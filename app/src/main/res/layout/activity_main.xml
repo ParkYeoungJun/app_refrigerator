@@ -7,8 +7,7 @@
     <RelativeLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:background="#33b5e5"
-        >
+        android:background="#33b5e5" >
 
         <TextView
             android:layout_centerInParent="true"
@@ -20,24 +19,58 @@
 
         <ImageButton
             android:id="@+id/homeButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
             android:layout_alignParentLeft="true"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
+            android:layout_marginBottom="5dp"
+            android:layout_width="38dp"
+            android:layout_height="38dp"
             android:background="@drawable/home_button2"/>
 
         <ImageButton
+            android:id="@+id/moveButton"
+            android:layout_marginTop="5dp"
+            android:layout_toLeftOf="@+id/removeButton"
+            android:background="@drawable/move_button3"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
+
+        <ImageButton
+            android:id="@+id/removeButton"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_toLeftOf="@+id/cancelButton"
+            android:background="@drawable/trash_button2"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
+
+        <ImageButton
+            android:id="@+id/cancelButton"
+            android:layout_alignParentRight="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:background="@drawable/delete_button"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
+
+        <ImageButton
             android:id="@+id/listButton"
+            android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/plusButton"
-            android:background="@drawable/menu_button"
-            android:layout_width="45dp"
-            android:layout_height="45dp" />
+            android:background="@drawable/check_button2"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
 
         <ImageButton
             android:id="@+id/plusButton"
+            android:layout_marginLeft="5dp"
+            android:layout_marginTop="5dp"
+            android:layout_marginRight="5dp"
             android:layout_alignParentRight="true"
-            android:layout_width="45dp"
-            android:layout_height="45dp"
-            android:background="@drawable/cart_button"/>
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:background="@drawable/plus_button"/>
 
     </RelativeLayout>
 
