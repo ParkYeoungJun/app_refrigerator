@@ -4,21 +4,18 @@ package com.example.younghyeon.test0901;
  * Created by YOUNGHYEON on 2016-09-02.
  */
 
-import java.util.ArrayList;
-import java.util.HashMap;
-
 import android.app.Activity;
-import android.support.v4.app.INotificationSideChannel;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
+import java.util.HashMap;
 
 public class GridViewAdapter extends BaseAdapter
 {
@@ -105,7 +102,7 @@ public class GridViewAdapter extends BaseAdapter
 
         final FoodItem curItem = (FoodItem) foodArrayList.get(position);
         view.txtViewTitle.setText(curItem.getName());
-        view.imgViewFlag.setImageResource(curItem.getImage());
+        view.imgViewFlag.setImageResource(getDrawableId(curItem.getImage()));
 
         view.checkBox.setId(position);
         view.checkBox.setChecked(foodArrayList.get(position).getIsChecked());
@@ -150,4 +147,38 @@ public class GridViewAdapter extends BaseAdapter
         return convertView;
     }
 
+    int getDrawableId(int _imageNum)
+    {
+        int ret = 7;
+        switch(_imageNum)
+        {
+            case 0:
+                ret = R.drawable.meat_icon;
+                break;
+            case 1:
+                ret = R.drawable.fish_icon;
+                break;
+            case 2:
+                ret = R.drawable.seafood_icon;
+                break;
+            case 3:
+                ret = R.drawable.vegetable_icon;
+                break;
+            case 4:
+                ret = R.drawable.fruit_icon;
+                break;
+            case 5:
+                ret = R.drawable.dairy_icon;
+                break;
+            case 6:
+                ret = R.drawable.beverage_icon;
+                break;
+            case 7:
+                ret = R.drawable.etc_icon;
+                break;
+            default:
+                break;
+        }
+        return ret;
+    }
 }

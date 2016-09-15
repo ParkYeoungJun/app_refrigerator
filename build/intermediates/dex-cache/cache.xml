@@ -2,60 +2,11 @@
 <items version="2" >
 
     <item
-        jar="C:\Users\hoont\.gradle\caches\modules-2\files-2.1\com.android.support\support-annotations\24.0.0\2943c74db6d4346ab8c6531adac91fa05c137c40\support-annotations-24.0.0.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="2943c74db6d4346ab8c6531adac91fa05c137c40">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\support-annotations-24.0.0_5e5840fb07ecfc337b76992d6373051e6d6ee866\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\exploded-aar\com.android.support\animated-vector-drawable\24.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="e70f608219ed6b974644c333249ab2bb7b71de98">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-animated-vector-drawable-24.0.0_5cae6c525357cc60fd15fe5e23d5cb74b34c484d\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\24.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="0874286cc2fd88d54fdf130e9d5372730da6de97">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-appcompat-v7-24.0.0_d09e74a6ba8297b00b7b4774b186f0857ea314a8\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\exploded-aar\com.android.support\support-vector-drawable\24.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="3bd97cfefd783e9de1dd1c30574a6adb44b4409b">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-vector-drawable-24.0.0_61a00e8925a1ef83a9aa9da2247e1126bb81a2b0\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\libs\internal_impl-24.0.0.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="fcaf463e10e69c1923ccf1edeba3b4196d239e00">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\internal_impl-24.0.0_3a3224afea9976668cf9690ee4aca5e404d36bd8\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\incremental-runtime-classes\debug\instant-run.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="04e2bc38cc5d4a9346d628e5dfdb95131a66a3a3">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run_8af66fd3c053ccb2ac0812a6e8daf821c3e02908\classes.dex" />
-    </item>
-    <item
         jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\incremental-classes\debug\instant-run-bootstrap.jar"
         jumboMode="true"
         revision="24.0.0"
-        sha1="c67121cc56207e9ae772210e3a6454650ce5adb9">
+        sha1="a6ba96987ccdf4aeb88e097b1b029a181484512b">
         <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\instant-run-bootstrap_0a4274e06f317e6d8429c9c483c933ea3d6948d8\classes.dex" />
-    </item>
-    <item
-        jar="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\exploded-aar\com.android.support\support-v4\24.0.0\jars\classes.jar"
-        jumboMode="true"
-        revision="24.0.0"
-        sha1="2f7e6e2dad1bccaf68a8820820adc6c0d5b96d37">
-        <dex dex="C:\Users\hoont\AndroidStudioProjects\app_refrigerator\app\build\intermediates\transforms\dex\debug\folders\1000\10\com.android.support-support-v4-24.0.0_354a8e9166111be0c9c4d782c81e4ff82c336832\classes.dex" />
     </item>
 
 </items>

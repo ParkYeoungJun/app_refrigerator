@@ -98,35 +98,35 @@ public class MainActivity extends AppCompatActivity {
                 intent.putExtra("position", mViewPager.getCurrentItem());
                 startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
 
-//                state = mViewPager.getCurrentItem();
-//                if (state==STATE_FREEZER) {
-//                    if (foodList1 == null){
-//                        foodList1 = new ArrayList<FoodItem>();
-//                    }
-//                    FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
-//                    foodList1.add(item);
-//                    mAdapter1.foodArrayList = foodList1;
-//                    mAdapter1.notifyDataSetChanged();
-//                }
-//                else if (state==STATE_REFRIGERATOR) {
-//                    if (foodList2 == null){
-//                        foodList2 = new ArrayList<FoodItem>();
-//                    }
-//                    FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
-//                    foodList2.add(item);
-//                    mAdapter2.foodArrayList = foodList2;
-//                    mAdapter2.notifyDataSetChanged();
-//                }
-//                else if (state==STATE_BASKET){
-//                    if (foodList3 == null){
-//                        foodList3 = new ArrayList<FoodItem>();
-//                    }
-//                    FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
-//                    foodList3.add(item);
-//                    mAdapter3.foodArrayList = foodList3;
-//                    mAdapter3.notifyDataSetChanged();
-//                }
-//                i++;
+                state = mViewPager.getCurrentItem();
+                if (state==STATE_FREEZER) {
+                    if (foodList1 == null){
+                        foodList1 = new ArrayList<FoodItem>();
+                    }
+                    FoodItem item = new FoodItem("몰라", "한국" + i, "", "", 3, R.drawable.korea);
+                    foodList1.add(item);
+                    mAdapter1.foodArrayList = foodList1;
+                    mAdapter1.notifyDataSetChanged();
+                }
+                else if (state==STATE_REFRIGERATOR) {
+                    if (foodList2 == null){
+                        foodList2 = new ArrayList<FoodItem>();
+                    }
+                    FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada);
+                    foodList2.add(item);
+                    mAdapter2.foodArrayList = foodList2;
+                    mAdapter2.notifyDataSetChanged();
+                }
+                else if (state==STATE_BASKET){
+                    if (foodList3 == null){
+                        foodList3 = new ArrayList<FoodItem>();
+                    }
+                    FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil);
+                    foodList3.add(item);
+                    mAdapter3.foodArrayList = foodList3;
+                    mAdapter3.notifyDataSetChanged();
+                }
+                i++;
             }
         });
     }
@@ -358,41 +358,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    int getDrawableId(int _imageNum)
-    {
-        int ret = 7;
-        switch(_imageNum)
-        {
-            case 0:
-                ret = R.drawable.meat_icon;
-                break;
-            case 1:
-                ret = R.drawable.fish_icon;
-                break;
-            case 2:
-                ret = R.drawable.seafood_icon;
-                break;
-            case 3:
-                ret = R.drawable.vegetable_icon;
-                break;
-            case 4:
-                ret = R.drawable.fruit_icon;
-                break;
-            case 5:
-                ret = R.drawable.dairy_icon;
-                break;
-            case 6:
-                ret = R.drawable.beverage_icon;
-                break;
-            case 7:
-                ret = R.drawable.etc_icon;
-                break;
-            default:
-                break;
-        }
-        return ret;
-    }
-
 
     public void postFood(String url){
         class postFoodJSON extends AsyncTask<String, Void, String> {
@@ -402,8 +367,8 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     String uri = params[0];
                     JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("group", item.getGroup());
-                    jsonObj.put("name", item.getName());
+                    jsonObj.put("group", item.getGroup().toString());
+                    jsonObj.put("name", item.getName().toString());
                     jsonObj.put("purchase_date", item.getDate());
                     jsonObj.put("image_num", item.getImage());
                     jsonObj.put("shelf_life", item.getShelf_life());
