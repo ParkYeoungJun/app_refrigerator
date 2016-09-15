@@ -21,9 +21,7 @@ public class GridViewAdapter extends BaseAdapter
 {
     ArrayList<FoodItem> foodArrayList;
     private Activity activity;
-
-    ArrayList<HashMap<String, String>> data;
-    HashMap<String, String> resultp = new HashMap<String, String>();
+    private boolean check;
 
     /*
     private ArrayList<String> listCountry;
@@ -36,7 +34,26 @@ public class GridViewAdapter extends BaseAdapter
 //        this.listCountry = listCountry;
 //        this.listFlag = listFlag;
         this.activity = activity;
+        this.check = false;
 //        this.check = check;
+    }
+    public boolean getCheck() { return this.check; }
+
+    public void setCheck(boolean bool) { this.check = bool; }
+
+    public int[] getCheckedPosition() {
+        int[] tempArray = new int[foodArrayList.size()];
+        int index = 1;
+        int cnt = 0;
+        for (int i = 0; i < foodArrayList.size(); i++){
+            if (foodArrayList.get(i).getIsChecked() == true) {
+                tempArray[index] = i;
+                index++;
+                cnt++;
+            }
+        }
+        tempArray[0] = cnt;
+        return tempArray;
     }
 
     public void clear() {
@@ -93,8 +110,6 @@ public class GridViewAdapter extends BaseAdapter
             view.imgViewFlag = (ImageView) convertView.findViewById(R.id.grid_image);
             view.checkBox = (CheckBox) convertView.findViewById(R.id.grid_checkbox);
 
-//            view.checkBox.setTag(position);
-//            view.checkBox.setChecked(false);
             convertView.setTag(view);
         } else {
             view = (ViewHolder) convertView.getTag();
@@ -104,8 +119,17 @@ public class GridViewAdapter extends BaseAdapter
         view.txtViewTitle.setText(curItem.getName());
         view.imgViewFlag.setImageResource(getDrawableId(curItem.getImage()));
 
+        if (check == false) {
+            view.checkBox.setVisibility(View.INVISIBLE);
+            for(int i = 0; i < foodArrayList.size(); i++){
+                foodArrayList.get(i).setIsChecked(false);
+            }
+        } else {
+            view.checkBox.setVisibility(View.VISIBLE);
+        }
         view.checkBox.setId(position);
         view.checkBox.setChecked(foodArrayList.get(position).getIsChecked());
+
         view.checkBox.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -129,21 +153,6 @@ public class GridViewAdapter extends BaseAdapter
                 }
             }
         });
-
-//        view.txtViewTitle.setText(listCountry.get(position));
-//        view.imgViewFlag.setImageResource(listFlag.get(position));
-
-//        view.checkBox.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                if (((CheckBox) view).isChecked()) {
-//                    curItem.setIsChecked(true);
-//                } else {
-//                    curItem.setIsChecked(false);
-//                }
-//            }
-//        });
-
         return convertView;
     }
 
