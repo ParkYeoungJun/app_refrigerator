@@ -30,8 +30,11 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.concurrent.TimeUnit;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,6 +48,8 @@ public class MainActivity extends AppCompatActivity {
      */
     private static final String TAG_RESULTS="result";
     private static final String TAG_ID = "id";
+
+    public static SimpleDateFormat timeFormat = new SimpleDateFormat("yyyy-MM-dd");
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -91,6 +96,9 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); // 앱 타이틀 제거
         setContentView(R.layout.activity_main);
 
+        mAdapter1 = new GridViewAdapter(MainActivity.this);
+        mAdapter2 = new GridViewAdapter(MainActivity.this);
+        mAdapter3 = new GridViewAdapter(MainActivity.this);
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -537,6 +545,8 @@ public class MainActivity extends AppCompatActivity {
 //                i++;
             }
         });
+        Log.e("good", "hi");
+        getFood("http://52.78.88.182/getFood.php");
     }
 
     public void setVisibleToCheckOff(){
@@ -654,7 +664,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
-
+            Log.e("jsonerr", "onCreateView");
             int i = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
@@ -674,7 +684,7 @@ public class MainActivity extends AppCompatActivity {
 //                });
 
                 gridViewFreezer = (GridView) rootView.findViewById(R.id.gridView1);
-                mAdapter1 = new GridViewAdapter(getActivity());
+//                mAdapter1 = new GridViewAdapter(getActivity());
                 Log.e("Main", "GridView : hi");
                 gridViewFreezer.setAdapter(mAdapter1);
                 gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -688,7 +698,7 @@ public class MainActivity extends AppCompatActivity {
             }
             else if (i == 2) {
                 gridViewRefrigerator = (GridView) rootView.findViewById(R.id.gridView1);
-                mAdapter2 = new GridViewAdapter(getActivity());
+//                mAdapter2 = new GridViewAdapter(getActivity());
                 gridViewRefrigerator.setAdapter(mAdapter2);
                 gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -699,7 +709,7 @@ public class MainActivity extends AppCompatActivity {
                 return rootView;
             } else if (i == 3) {
                 gridViewBasket = (GridView) rootView.findViewById(R.id.gridView1);
-                mAdapter3 = new GridViewAdapter(getActivity());
+//                mAdapter3 = new GridViewAdapter(getActivity());
                 gridViewBasket.setAdapter(mAdapter3);
                 gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
@@ -825,14 +835,141 @@ public class MainActivity extends AppCompatActivity {
                     e.printStackTrace();
                 }
 
-
-//                showList();
             }
         }
         getMaxIdJSON g = new getMaxIdJSON();
         g.execute(url);
     }
 
+    public void getFood(String url){
+        class GetFoodJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+                Log.e("good", "hi1");
+                String uri = params[0];
+                Log.e("good", "hi2");
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
+                    }
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result){
+                myJSON = result;
+                showList();
+            }
+        }
+        GetFoodJSON g = new GetFoodJSON();
+        g.execute(url);
+    }
+
+
+    protected void showList()
+    {
+        try {
+
+            Log.e("jsonerr", "1");
+            JSONObject jsonObj = new JSONObject(myJSON);
+            Log.e("jsonerr", "2");
+            JSONArray items_jArr = null;
+            items_jArr = jsonObj.getJSONArray(TAG_RESULTS);
+            Log.e("jsonerr", "3");
+            for (int i = 0; i < items_jArr.length(); i++)
+            {
+                JSONObject c = items_jArr.getJSONObject(i);
+                int id = Integer.parseInt(c.getString("id"));
+                String group = c.getString("group");
+                String name = c.getString("name");
+                String purDate = c.getString("purchase_date");
+                String shelfLife = c.getString("shelf_life");
+                int position = Integer.parseInt(c.getString("position"));
+                int image_num = Integer.parseInt(c.getString("image_num"));
+                int num = Integer.parseInt(c.getString("num"));
+
+                 Calendar shelf_calen = Calendar.getInstance();
+                shelf_calen.setTime(timeFormat.parse(shelfLife));
+
+//                Log.e("jsonerr", id + ", "+ group + ", "+ name + ", "+ purDate + ", "+ shelfLife + ", "+position + ", "+ image_num + ", "+ num);
+//
+                Calendar tmp_calen = Calendar.getInstance();
+                tmp_calen.set(Calendar.HOUR_OF_DAY, 0);
+                tmp_calen.set(Calendar.MINUTE, 0);
+                tmp_calen.set(Calendar.SECOND, 0);
+                tmp_calen.set(Calendar.MILLISECOND, 0);
+//
+                long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelf_calen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
+//
+//                Log.e("jsonerr", "diff : " + (int) diff);
+                FoodItem tmp_item = new FoodItem(group, name, purDate, shelfLife, (int) diff, image_num, num, position);
+//
+                Log.e("jsonerr", id + ", "+ group + ", "+ name + ", "+ purDate + ", "+ shelfLife + ", "+position + ", "+ image_num + ", "+ num+ ", "+ (int)diff);
+
+                if (position == STATE_FREEZER)
+                {
+                    Log.e("jsonerr", "STATE_FREEZER");
+                    if (foodList1 == null){
+                        foodList1 = new ArrayList<FoodItem>();
+                    }
+//
+                    foodList1.add(tmp_item);
+                    mAdapter1.foodArrayList = foodList1;
+//                    mAdapter1.notifyDataSetChanged();
+//                    Log.e("good", "item id : " + item.getId());
+//
+                }
+                else if (position == STATE_REFRIGERATOR)
+                {
+                    Log.e("jsonerr", "STATE_REFRIGERATOR");
+                    if (foodList2 == null){
+                        foodList2 = new ArrayList<FoodItem>();
+                    }
+                    foodList2.add(tmp_item);
+                    mAdapter2.foodArrayList = foodList2;
+//                    mAdapter2.notifyDataSetChanged();
+                }
+                else if (position == STATE_BASKET)
+                {
+                    Log.e("jsonerr", "STATE_BASKET");
+                    if (foodList3 == null){
+                        foodList3 = new ArrayList<FoodItem>();
+                    }
+                    foodList3.add(tmp_item);
+                    mAdapter3.foodArrayList = foodList3;
+//                    mAdapter3.notifyDataSetChanged();
+                }
+            }
+//            mAdapter1.foodArrayList = foodList1;
+            mAdapter1.notifyDataSetChanged();
+//            mAdapter2.foodArrayList = foodList1;
+            mAdapter2.notifyDataSetChanged();
+//            mAdapter3.foodArrayList = foodList1;
+            mAdapter3.notifyDataSetChanged();
+
+        }catch (JSONException e) {
+            Log.e("JSON Parser", "Error parsing data [" + e.getMessage()+"] "+myJSON);
+            e.printStackTrace();
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+    }
 
 
 }
