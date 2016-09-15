@@ -22,15 +22,14 @@ import android.widget.GridView;
 import android.widget.ImageButton;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Locale;
 
@@ -44,6 +43,8 @@ public class MainActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    private static final String TAG_RESULTS="result";
+    private static final String TAG_ID = "id";
 
     SectionsPagerAdapter mSectionsPagerAdapter;
 
@@ -81,6 +82,8 @@ public class MainActivity extends AppCompatActivity {
     ImageButton removeButton;
     ImageButton moveButton;
     ImageButton cancelButton;
+
+    String myJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -729,167 +732,107 @@ public class MainActivity extends AppCompatActivity {
 
             Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
 
-            if (position == STATE_FREEZER) {
-                if (foodList1 == null){
-                    foodList1 = new ArrayList<FoodItem>();
-                }
-
-                item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
-                foodList1.add(item);
-                mAdapter1.foodArrayList = foodList1;
-                mAdapter1.notifyDataSetChanged();
-
-                Log.e("jsonerr", "write_json100 : postFood");
-                postFood("http://52.78.88.182/insertFood.php");
-
-
-            }
-            else if (position == STATE_REFRIGERATOR) {
-                if (foodList2 == null){
-                    foodList2 = new ArrayList<FoodItem>();
-                }
-                FoodItem item = new FoodItem("몰라", "캐나다", "", "", 3, R.drawable.canada, 0, position);
-                foodList2.add(item);
-                mAdapter2.foodArrayList = foodList2;
-                mAdapter2.notifyDataSetChanged();
-            }
-            else if (position == STATE_BASKET){
-                if (foodList3 == null){
-                    foodList3 = new ArrayList<FoodItem>();
-                }
-                FoodItem item = new FoodItem("몰라", "브라질", "", "", 3, R.drawable.brazil, 0, position);
-                foodList3.add(item);
-                mAdapter3.foodArrayList = foodList3;
-                mAdapter3.notifyDataSetChanged();
-            }
-
-
-
-//            String time = intent.getStringExtra("time");
-//            String message = intent.getStringExtra("message");
-//            int selectedWeather = intent.getIntExtra("weather", 0);
-//
-//            if (message != null) {
-//                Toast toast = Toast.makeText(getBaseContext(), "time : " + time + ", message : " + message + ", selectedWeather : " + selectedWeather, Toast.LENGTH_LONG);
-//                toast.show();
-//                // 일정 추가 저장시 토스트 메시지 띄우는 거
-//
-//
-//                ScheduleListItem aItem = new ScheduleListItem(time, message);
-//
-//                if (outScheduleList == null) {
-//                    outScheduleList = new ArrayList();
-//                }
-//                outScheduleList.add(aItem);
-//
-//                monthViewAdapter.putSchedule(curPosition, outScheduleList);
-//
-//                scheduleAdapter.scheduleList = outScheduleList;
-//                scheduleAdapter.notifyDataSetChanged();
-//            }
+            item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
+            getMaxId("http://52.78.88.182/getMaxFoodId.php");
         }
-//        else if (requestCode == REQUEST_CODE_SCHEDULE_REMOVE){
-//            if (intent == null) {
-//                return;
-//            }
-//
-//            // 이걸 하면 Calendar getView가 콜이 되는건가 암튼 화면 업데이트 할 수 있다.
-//            monthViewAdapter.notifyDataSetChanged();
-//            scheduleAdapter.notifyDataSetChanged();
-//        }
-
     }
 
 
-    public void postFood(String url){
-        class postFoodJSON extends AsyncTask<String, Void, String> {
+
+
+    public void getMaxId(String url){
+        class getMaxIdJSON extends AsyncTask<String, Void, String> {
 
             @Override
             protected String doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
                 try {
-                    String uri = params[0];
-                    JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("group", item.getGroup().toString());
-                    jsonObj.put("name", item.getName().toString());
-                    jsonObj.put("purchase_date", item.getDate());
-                    jsonObj.put("image_num", item.getImage());
-                    jsonObj.put("shelf_life", item.getShelf_life());
-                    jsonObj.put("num", item.getNum());
-                    jsonObj.put("position", item.getPosition());
-
-
-                    BufferedWriter bufferedWriter = null;
-//                BufferedReader bufferedReader = null;
-                    Log.e("jsonerr", "write_json0 : " + jsonObj.toString());
                     URL url = new URL(uri);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
-                    Log.e("jsonerr", "write_json1 : " + jsonObj.toString());
-                    con.setDoOutput(true);
-                    con.setDoInput(true);
-                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
 
-                    String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonObj.toString();
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
 
-                    OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
-//                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령
-                    wr.write(data);
-//                    Log.e("jsonerr", "write() : ");
-
-                    wr.flush();
-
-                    //OutputStream os = con.getOutputStream();
-                    Log.e("jsonerr", "write_json6 : " + jsonObj.toString());
-                    //BufferedWriter writer = new BufferedWriter(
-                    //      new OutputStreamWriter(os, "UTF-8"));
-                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
-                    //os.write(jsonObj.toString().getBytes());
-
-//                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
-//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-//                    bufferedWriter.write(jsonObj);
-                    //bufferedWriter.write(jsonObj.toString());
-                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
-//                    String json;
-//                    while((json = bufferedReader.readLine())!= null){
-//                        sb.append(json+"\n");
-//                    }
-                    Log.e("jsonerr", "before read");
-                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    Log.e("jsonerr", "ing read");
-                    String line=null;
-                    Log.e("jsonerr", "ing read");
-                    while((line=reader.readLine())!=null){
-                        //서버응답값을 String 형태로 추가함
-                        Log.e("jsonerr", "Input Read : " + line+"\n");
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
                     }
-                    Log.e("jsonerr", "after read");
-
-
-
 
                     return sb.toString().trim();
 
                 }catch(Exception e){
                     return null;
                 }
-
-
-
             }
-
 
             @Override
             protected void onPostExecute(String result){
-                Log.e("jsonerr", "result : "+ result);
-//                myJSON=result;
+                myJSON = result;
+                JSONArray items_jarr = null;
+                try {
+                    JSONObject jsonObj = new JSONObject(myJSON);
+                    items_jarr = jsonObj.getJSONArray(TAG_RESULTS);
+
+                    for(int i=0; i < items_jarr.length();i++)
+                    {
+                        JSONObject c = items_jarr.getJSONObject(i);
+                        String id = c.getString(TAG_ID);
+                        item.setId(Integer.parseInt(id));
+                        Log.e("good", "string id : "+ id);
+
+                        int _position = item.getPosition();
+
+                        if (_position == STATE_FREEZER)
+                        {
+                            if (foodList1 == null){
+                                foodList1 = new ArrayList<FoodItem>();
+                            }
+
+                            foodList1.add(item);
+                            mAdapter1.foodArrayList = foodList1;
+                            mAdapter1.notifyDataSetChanged();
+                            Log.e("good", "item id : " + item.getId());
+
+                        }
+                        else if (_position == STATE_REFRIGERATOR)
+                        {
+                            if (foodList2 == null){
+                                foodList2 = new ArrayList<FoodItem>();
+                            }
+                            foodList2.add(item);
+                            mAdapter2.foodArrayList = foodList2;
+                            mAdapter2.notifyDataSetChanged();
+                        }
+                        else if (_position == STATE_BASKET)
+                        {
+                            if (foodList3 == null){
+                                foodList3 = new ArrayList<FoodItem>();
+                            }
+                            foodList3.add(item);
+                            mAdapter3.foodArrayList = foodList3;
+                            mAdapter3.notifyDataSetChanged();
+                        }
+
+                    }
+
+
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data [" + e.getMessage()+"] "+myJSON);
+                    e.printStackTrace();
+                }
+
+
 //                showList();
             }
         }
-        postFoodJSON g = new postFoodJSON();
+        getMaxIdJSON g = new getMaxIdJSON();
         g.execute(url);
     }
+
+
 
 }

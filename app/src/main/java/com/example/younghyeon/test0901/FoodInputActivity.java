@@ -3,6 +3,7 @@ package com.example.younghyeon.test0901;
 import android.app.Activity;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -14,6 +15,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.net.URLEncoder;
 import java.util.Calendar;
 import java.util.concurrent.TimeUnit;
 
@@ -39,6 +49,7 @@ public class FoodInputActivity extends Activity {
     String[] groupStr;
     String[] shelfStrArr;
     int shelf_index1, shelf_index2, shelf_num;
+    FoodItem item;
 
     Calendar purCalen, shelfCalen;
 
@@ -209,30 +220,43 @@ public class FoodInputActivity extends Activity {
             @Override
             public void onClick(View view) {
                 //extra 추가
-                Intent intent = new Intent();
                 int num = 0;
                 try
                 {
+//                    name_str = numEditText.getText().toString();
                     if(numEditText.getText().toString().compareTo("") != 0)
                     {
                         num = Integer.parseInt(numEditText.getText().toString());
                     }
 
-                    if(nameEditText.getText().toString().compareTo("") == 0)
+                    if(name_str.compareTo("") == 0)
                     {
                         Toast.makeText(FoodInputActivity.this, "식품명을 입력해주세요.", Toast.LENGTH_SHORT).show();
                     }
                     else
                     {
+                        String pur_str = purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH));
+                        String shelf_str =  shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH));
+
+                        item = new FoodItem(group_str, name_str, pur_str, shelf_str, 365, image_num, num, position);
+                        postFood("http://52.78.88.182/insertFood.php");
+
+                        Intent intent = new Intent();
                         intent.putExtra("group", group_str);
-                        intent.putExtra("name", nameEditText.getText().toString());
-                        intent.putExtra("purDate", purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH)));
-                        intent.putExtra("shelfLife", shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH)));
+                        intent.putExtra("name", name_str);
+                        intent.putExtra("purDate", pur_str);
+                        intent.putExtra("shelfLife", shelf_str);
                         intent.putExtra("num", num);
                         intent.putExtra("image_num", image_num);
                         intent.putExtra("position", position);
                         long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - purCalen.getTimeInMillis()));
                         intent.putExtra("d_day", diff);
+//                        Log.e("good", "long diff : " + (int) diff);
+//                        int diff_int = (int)
+
+
+                        Log.e("good", "?????");
+
 
                         setResult(RESULT_OK, intent);
                         finish();
@@ -296,5 +320,94 @@ public class FoodInputActivity extends Activity {
         shelfCalen.setTime(purCalen.getTime());
         shelfCalen.add(Calendar.DATE, Integer.parseInt(shelfStrArr[shelf_num]));
         shelDateBtn.setText(shelfCalen.get(Calendar.YEAR)+"년 "+(shelfCalen.get(Calendar.MONTH)+1)+"월 "+ shelfCalen.get(Calendar.DAY_OF_MONTH)+"일");
+    }
+
+
+    public void postFood(String url){
+        class postFoodJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    String uri = params[0];
+                    JSONObject jsonObj = new JSONObject();
+                    jsonObj.put("group", item.getGroup().toString());
+                    jsonObj.put("name", item.getName().toString());
+                    jsonObj.put("purchase_date", item.getDate());
+                    jsonObj.put("image_num", item.getImage());
+                    jsonObj.put("shelf_life", item.getShelf_life());
+                    jsonObj.put("num", item.getNum());
+                    jsonObj.put("position", item.getPosition());
+
+
+                    BufferedWriter bufferedWriter = null;
+//                BufferedReader bufferedReader = null;
+                    Log.e("jsonerr", "write_json0 : " + jsonObj.toString());
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+                    Log.e("jsonerr", "write_json1 : " + jsonObj.toString());
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
+
+                    String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonObj.toString();
+
+                    OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
+//                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령
+                    wr.write(data);
+//                    Log.e("jsonerr", "write() : ");
+
+                    wr.flush();
+
+                    //OutputStream os = con.getOutputStream();
+                    Log.e("jsonerr", "write_json6 : " + jsonObj.toString());
+                    //BufferedWriter writer = new BufferedWriter(
+                    //      new OutputStreamWriter(os, "UTF-8"));
+                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
+                    //os.write(jsonObj.toString().getBytes());
+
+//                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
+//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+//                    bufferedWriter.write(jsonObj);
+                    //bufferedWriter.write(jsonObj.toString());
+                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
+//                    String json;
+//                    while((json = bufferedReader.readLine())!= null){
+//                        sb.append(json+"\n");
+//                    }
+                    Log.e("jsonerr", "before read");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    Log.e("jsonerr", "ing read");
+                    String line=null;
+                    Log.e("jsonerr", "ing read");
+                    while((line=reader.readLine())!=null){
+                        //서버응답값을 String 형태로 추가함
+                        Log.e("jsonerr", "Input Read : " + line+"\n");
+                    }
+                    Log.e("jsonerr", "after read");
+
+
+
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+
+            @Override
+            protected void onPostExecute(String result){
+                Log.e("jsonerr", "result : "+ result);
+//                myJSON=result;
+//                showList();
+            }
+        }
+        postFoodJSON g = new postFoodJSON();
+        g.execute(url);
     }
 }
