@@ -1,39 +1,37 @@
 package com.example.younghyeon.test0901;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Locale;
-
 import android.app.AlertDialog;
-import android.content.ClipData;
-import android.content.ClipDescription;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.media.Image;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.app.ActionBar;
+import android.os.AsyncTask;
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.os.Bundle;
 import android.support.v4.view.ViewPager;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.DragEvent;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.GridView;
 import android.widget.ImageButton;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.ArrayList;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -45,7 +43,12 @@ public class MainActivity extends AppCompatActivity {
      * may be best to switch to a
      * {@link android.support.v4.app.FragmentStatePagerAdapter}.
      */
+    private static final String TAG_RESULTS="result";
+    private static final String TAG_ID = "id";
+
     SectionsPagerAdapter mSectionsPagerAdapter;
+
+    public static final int REQUEST_CODE_FOOD_INPUT = 1001;
 
     final int STATE_FREEZER = 0;
     final int STATE_REFRIGERATOR = 1;
@@ -58,6 +61,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean checkRemoveButtonVisibility = false;
     int i = 1;
+    int state;
     ArrayList foodList1;
     ArrayList foodList2;
     ArrayList foodList3;
@@ -73,10 +77,13 @@ public class MainActivity extends AppCompatActivity {
     public static GridView gridViewBasket;
 
     ImageButton plusButton;
+    FoodItem item;
     ImageButton listButton;
     ImageButton removeButton;
     ImageButton moveButton;
     ImageButton cancelButton;
+
+    String myJSON;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter1.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.korea);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.korea, 0, 1);
                                         if (foodList2 == null) {
                                             foodList2 = new ArrayList<FoodItem>();
                                         }
@@ -160,7 +167,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter1.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.korea);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.korea, 0, 1);
                                         if (foodList3 == null) {
                                             foodList3 = new ArrayList<FoodItem>();
                                         }
@@ -210,7 +217,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter2.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada, 0, 1);
                                         if (foodList1 == null) {
                                             foodList1 = new ArrayList<FoodItem>();
                                         }
@@ -246,7 +253,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter2.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada, 0, 1);
                                         if (foodList3 == null) {
                                             foodList3 = new ArrayList<FoodItem>();
                                         }
@@ -296,7 +303,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter3.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil, 0, 1);
                                         if (foodList1 == null) {
                                             foodList1 = new ArrayList<FoodItem>();
                                         }
@@ -332,7 +339,7 @@ public class MainActivity extends AppCompatActivity {
                                     for (int a = 1; a <= tempArraySize; a++) {
                                         String str = "";
                                         str = mAdapter3.foodArrayList.get(tempArray[a] + cnt).getName();
-                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil);
+                                        FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil, 0, 1);
                                         if (foodList2 == null) {
                                             foodList2 = new ArrayList<FoodItem>();
                                         }
@@ -493,35 +500,41 @@ public class MainActivity extends AppCompatActivity {
         plusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                int state = mViewPager.getCurrentItem();
-                if (state==STATE_FREEZER) {
-                    if (foodList1 == null){
-                        foodList1 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "한국 " + i, "", "", 3, R.drawable.korea);
-                    foodList1.add(item);
-                    mAdapter1.foodArrayList = foodList1;
-                    mAdapter1.notifyDataSetChanged();
-                }
-                else if (state==STATE_REFRIGERATOR) {
-                    if (foodList2 == null){
-                        foodList2 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "캐나다" + i, "", "", 3, R.drawable.canada);
-                    foodList2.add(item);
-                    mAdapter2.foodArrayList = foodList2;
-                    mAdapter2.notifyDataSetChanged();
-                }
-                else if (state==STATE_BASKET){
-                    if (foodList3 == null){
-                        foodList3 = new ArrayList<FoodItem>();
-                    }
-                    FoodItem item = new FoodItem("몰라", "브라질" + i, "", "", 3, R.drawable.brazil);
-                    foodList3.add(item);
-                    mAdapter3.foodArrayList = foodList3;
-                    mAdapter3.notifyDataSetChanged();
-                }
-                i++;
+
+                Intent intent = new Intent(MainActivity.this, FoodInputActivity.class);
+//                state = mViewPager.getCurrentItem();
+                intent.putExtra("position", mViewPager.getCurrentItem());
+                startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
+
+
+//                if (state==STATE_FREEZER) {
+//                    if (foodList1 == null){
+//                        foodList1 = new ArrayList<FoodItem>();
+//                    }
+////                    FoodItem item = new FoodItem("몰라", "한국 " + i, "", "", 3, R.drawable.korea, 0, 1);
+//                    foodList1.add(item);
+//                    mAdapter1.foodArrayList = foodList1;
+//                    mAdapter1.notifyDataSetChanged();
+//                }
+//                else if (state==STATE_REFRIGERATOR) {
+//                    if (foodList2 == null){
+//                        foodList2 = new ArrayList<FoodItem>();
+//                    }
+//                    FoodItem item = new FoodItem("몰라", "캐나다" + i, "", "", 3, R.drawable.canada, 0, 1);
+//                    foodList2.add(item);
+//                    mAdapter2.foodArrayList = foodList2;
+//                    mAdapter2.notifyDataSetChanged();
+//                }
+//                else if (state==STATE_BASKET){
+//                    if (foodList3 == null){
+//                        foodList3 = new ArrayList<FoodItem>();
+//                    }
+//                    FoodItem item = new FoodItem("몰라", "브라질" + i, "", "", 3, R.drawable.brazil, 0, 1);
+//                    foodList3.add(item);
+//                    mAdapter3.foodArrayList = foodList3;
+//                    mAdapter3.notifyDataSetChanged();
+//                }
+//                i++;
             }
         });
     }
@@ -699,4 +712,127 @@ public class MainActivity extends AppCompatActivity {
             return rootView;
         }
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
+        super.onActivityResult(requestCode, resultCode, intent);
+
+        if (requestCode == REQUEST_CODE_FOOD_INPUT) {
+            if (intent == null) {
+                return;
+            }
+
+            String group = intent.getStringExtra("group");
+            String name = intent.getStringExtra("name");
+            String purDate = intent.getStringExtra("purDate");
+            String shelfLife = intent.getStringExtra("shelfLife");
+            int num = intent.getIntExtra("num", 0);
+            int image_num = intent.getIntExtra("image_num", 7);
+            int position = intent.getIntExtra("position", 0);
+            int d_day = intent.getIntExtra("d_day", 0);
+
+            Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
+
+            item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
+            getMaxId("http://52.78.88.182/getMaxFoodId.php");
+        }
+    }
+
+
+
+
+    public void getMaxId(String url){
+        class getMaxIdJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
+                    }
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result){
+                myJSON = result;
+                JSONArray items_jarr = null;
+                try {
+                    JSONObject jsonObj = new JSONObject(myJSON);
+                    items_jarr = jsonObj.getJSONArray(TAG_RESULTS);
+
+                    for(int i=0; i < items_jarr.length();i++)
+                    {
+                        JSONObject c = items_jarr.getJSONObject(i);
+                        String id = c.getString(TAG_ID);
+                        item.setId(Integer.parseInt(id));
+                        Log.e("good", "string id : "+ id);
+
+                        int _position = item.getPosition();
+
+                        if (_position == STATE_FREEZER)
+                        {
+                            if (foodList1 == null){
+                                foodList1 = new ArrayList<FoodItem>();
+                            }
+
+                            foodList1.add(item);
+                            mAdapter1.foodArrayList = foodList1;
+                            mAdapter1.notifyDataSetChanged();
+                            Log.e("good", "item id : " + item.getId());
+
+                        }
+                        else if (_position == STATE_REFRIGERATOR)
+                        {
+                            if (foodList2 == null){
+                                foodList2 = new ArrayList<FoodItem>();
+                            }
+                            foodList2.add(item);
+                            mAdapter2.foodArrayList = foodList2;
+                            mAdapter2.notifyDataSetChanged();
+                        }
+                        else if (_position == STATE_BASKET)
+                        {
+                            if (foodList3 == null){
+                                foodList3 = new ArrayList<FoodItem>();
+                            }
+                            foodList3.add(item);
+                            mAdapter3.foodArrayList = foodList3;
+                            mAdapter3.notifyDataSetChanged();
+                        }
+
+                    }
+
+
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data [" + e.getMessage()+"] "+myJSON);
+                    e.printStackTrace();
+                }
+
+
+//                showList();
+            }
+        }
+        getMaxIdJSON g = new getMaxIdJSON();
+        g.execute(url);
+    }
+
+
+
 }
