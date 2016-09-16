@@ -33,6 +33,8 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
@@ -94,12 +96,14 @@ public class MainActivity extends AppCompatActivity {
 
     public static int view_index;
 
+    boolean isShelfOder;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); // 앱 타이틀 제거
         setContentView(R.layout.activity_main);
-
+        isShelfOder = true;
         mAdapter1 = new GridViewAdapter(MainActivity.this);
         mAdapter2 = new GridViewAdapter(MainActivity.this);
         mAdapter3 = new GridViewAdapter(MainActivity.this);
@@ -848,21 +852,92 @@ public class MainActivity extends AppCompatActivity {
             up_item.setImage(image_num);
             up_item.setD_day(d_day);
 
+            Comparator<FoodItem> FoodComparator = new Comparator<FoodItem> () {
+                public int compare(FoodItem f1, FoodItem f2) {
+                    return f1.getShelf_life().compareTo(f2.getShelf_life());
+                }
+            };
+
+
             if(position == STATE_FREEZER)
             {
 //                FoodItem f = (FoodItem) foodList1.get(view_index);
 //                Log.e("good", "foodList1 : " + f.getId() + ", "+ up_item.getId());
                 foodList1.set(view_index, up_item);
+
+                //유통기한 순 정렬
+                if(isShelfOder)
+                {
+                    Collections.sort(foodList1, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getShelf_life().compareTo(obj2.getShelf_life()));
+                        }
+                    });
+                }
+                //이름순 정렬
+                else
+                {
+                    Collections.sort(foodList1, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getName().compareTo(obj2.getName()));
+                        }
+                    });
+                }
                 mAdapter1.notifyDataSetChanged();
+
             }
             else if(position == STATE_REFRIGERATOR)
             {
                 foodList2.set(view_index, up_item);
+
+                //유통기한 순 정렬
+                if(isShelfOder)
+                {
+                    Collections.sort(foodList2, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getShelf_life().compareTo(obj2.getShelf_life()));
+                        }
+                    });
+                }
+                //이름순 정렬
+                else
+                {
+                    Collections.sort(foodList2, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getName().compareTo(obj2.getName()));
+                        }
+                    });
+                }
                 mAdapter2.notifyDataSetChanged();
             }
             else
             {
                 foodList3.set(view_index, up_item);
+
+                //유통기한 순 정렬
+                if(isShelfOder)
+                {
+                    Collections.sort(foodList3, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getShelf_life().compareTo(obj2.getShelf_life()));
+                        }
+                    });
+                }
+                //이름순 정렬
+                else
+                {
+                    Collections.sort(foodList3, new Comparator<FoodItem>() {
+                        public int compare(FoodItem obj1, FoodItem obj2) {
+                            // TODO Auto-generated method stub
+                            return (obj1.getName().compareTo(obj2.getName()));
+                        }
+                    });
+                }
                 mAdapter3.notifyDataSetChanged();
             }
         }
