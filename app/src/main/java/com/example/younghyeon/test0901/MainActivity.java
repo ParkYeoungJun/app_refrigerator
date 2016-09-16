@@ -54,6 +54,7 @@ public class MainActivity extends AppCompatActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     public static final int REQUEST_CODE_FOOD_INPUT = 1001;
+    public static final int REQUEST_CODE_FOOD_UPDATE = 1002;
 
     final int STATE_FREEZER = 0;
     final int STATE_REFRIGERATOR = 1;
@@ -687,12 +688,34 @@ public class MainActivity extends AppCompatActivity {
 //                mAdapter1 = new GridViewAdapter(getActivity());
                 Log.e("Main", "GridView : hi");
                 gridViewFreezer.setAdapter(mAdapter1);
-                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewFreezer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem t_item = (FoodItem) mAdapter1.getItem(i);
+                        Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
+                        intent.putExtra("id", t_item.getId());
+                        intent.putExtra("group", t_item.getGroup());
+                        intent.putExtra("name", t_item.getName());
+                        intent.putExtra("purshase_date", t_item.getDate());
+                        intent.putExtra("shelf_life", t_item.getShelf_life());
+                        intent.putExtra("num", t_item.getNum());
+                        intent.putExtra("image_num", t_item.getImage());
+                        intent.putExtra("position", t_item.getPosition());
+                        startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
+
+
+
+                        Log.e("good", "gridViewFreezer : "+t_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 mAdapter1.notifyDataSetChanged();
                 return rootView;
             }
@@ -700,23 +723,41 @@ public class MainActivity extends AppCompatActivity {
                 gridViewRefrigerator = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter2 = new GridViewAdapter(getActivity());
                 gridViewRefrigerator.setAdapter(mAdapter2);
-                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewRefrigerator.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem t_item = (FoodItem) mAdapter2.getItem(i);
+                        Log.e("good", "gridViewRefrigerator : "+t_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 return rootView;
             } else if (i == 3) {
                 gridViewBasket = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter3 = new GridViewAdapter(getActivity());
                 gridViewBasket.setAdapter(mAdapter3);
-                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewBasket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem t_item = (FoodItem) mAdapter3.getItem(i);
+                        Log.e("good", "gridViewBasket : "+t_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 return rootView;
             }
             return rootView;
