@@ -238,7 +238,15 @@ public class FoodInputActivity extends Activity {
                         String pur_str = purCalen.get(Calendar.YEAR) + "-" + String.format("%02d", purCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", purCalen.get(Calendar.DAY_OF_MONTH));
                         String shelf_str =  shelfCalen.get(Calendar.YEAR) + "-" + String.format("%02d", shelfCalen.get(Calendar.MONTH) + 1) + "-" + String.format("%02d", shelfCalen.get(Calendar.DAY_OF_MONTH));
 
-                        item = new FoodItem(group_str, name_str, pur_str, shelf_str, 365, image_num, num, position);
+                        Calendar tmp_calen = Calendar.getInstance();
+                        tmp_calen.set(Calendar.HOUR_OF_DAY, 0);
+                        tmp_calen.set(Calendar.MINUTE, 0);
+                        tmp_calen.set(Calendar.SECOND, 0);
+                        tmp_calen.set(Calendar.MILLISECOND, 0);
+
+                        long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
+
+                        item = new FoodItem(group_str, name_str, pur_str, shelf_str, (int) diff, image_num, num, position);
                         postFood("http://52.78.88.182/insertFood.php");
 
                         Intent intent = new Intent();
@@ -249,13 +257,10 @@ public class FoodInputActivity extends Activity {
                         intent.putExtra("num", num);
                         intent.putExtra("image_num", image_num);
                         intent.putExtra("position", position);
-                        long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - purCalen.getTimeInMillis()));
                         intent.putExtra("d_day", diff);
-//                        Log.e("good", "long diff : " + (int) diff);
-//                        int diff_int = (int)
 
 
-                        Log.e("good", "?????");
+
 
 
                         setResult(RESULT_OK, intent);
