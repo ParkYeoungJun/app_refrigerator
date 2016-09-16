@@ -687,12 +687,21 @@ public class MainActivity extends AppCompatActivity {
 //                mAdapter1 = new GridViewAdapter(getActivity());
                 Log.e("Main", "GridView : hi");
                 gridViewFreezer.setAdapter(mAdapter1);
-                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewFreezer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem tmp_item = (FoodItem) mAdapter1.getItem(i);
+                        Log.e("good", "gridViewFreezer : "+tmp_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 mAdapter1.notifyDataSetChanged();
                 return rootView;
             }
@@ -700,23 +709,41 @@ public class MainActivity extends AppCompatActivity {
                 gridViewRefrigerator = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter2 = new GridViewAdapter(getActivity());
                 gridViewRefrigerator.setAdapter(mAdapter2);
-                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewRefrigerator.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem tmp_item = (FoodItem) mAdapter2.getItem(i);
+                        Log.e("good", "gridViewRefrigerator : "+tmp_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 return rootView;
             } else if (i == 3) {
                 gridViewBasket = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter3 = new GridViewAdapter(getActivity());
                 gridViewBasket.setAdapter(mAdapter3);
-                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                gridViewBasket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
-                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-                                            long arg3) {
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        FoodItem tmp_item = (FoodItem) mAdapter3.getItem(i);
+                        Log.e("good", "gridViewBasket : "+tmp_item.getGroup());
+
+                        return false;
                     }
                 });
+//                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+//                    @Override
+//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
+//                                            long arg3) {
+//                    }
+//                });
                 return rootView;
             }
             return rootView;
