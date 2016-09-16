@@ -111,9 +111,17 @@ public class FoodInputActivity extends Activity {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
                 Log.e("onItemSelected : ", nameAdapter.getItem(i).toString());
-                name_str = nameAdapter.getItem(i).toString();
-                nameEditText.setText(name_str);
-                nameEditText.setSelection(name_str.length());
+                if(nameAdapter.getItem(i).toString().compareTo("기타")==0) {
+                    name_str="";
+                    nameEditText.setText("");
+                    nameEditText.setSelection(0);
+                }
+                else
+                {
+                    name_str = nameAdapter.getItem(i).toString();
+                    nameEditText.setText(name_str);
+                    nameEditText.setSelection(name_str.length());
+                }
                 shelf_index2 = i;
                 shelf_num = shelf_index1 + shelf_index2;
                 Log.e("good", shelfStrArr[shelf_num].toString());
@@ -145,7 +153,6 @@ public class FoodInputActivity extends Activity {
                 nameSpinner.setAdapter(nameAdapter);
                 name_str = nameAdapter.getItem(0).toString();
                 nameEditText.setText(name_str);
-
 
                 Log.e("good", "q3 "+Integer.parseInt(shelfStrArr[shelf_num]));
                 setShelfCalen();
@@ -199,7 +206,7 @@ public class FoodInputActivity extends Activity {
                     {
                         num = Integer.parseInt(numEditText.getText().toString());
                     }
-
+                    name_str = nameEditText.getText().toString();
                     if(name_str.compareTo("") == 0)
                     {
                         Toast.makeText(FoodInputActivity.this, "식품명을 입력해주세요.", Toast.LENGTH_SHORT).show();

@@ -61,6 +61,8 @@ public class FoodUpdateActivity extends Activity {
 
     ArrayAdapter<String> nameAdapter;
     ArrayAdapter<String> groupAdapter;
+    private Boolean nameSpinnerFirstCall = true;
+    private Boolean groupSpinnerFirstCall = true;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -76,8 +78,7 @@ public class FoodUpdateActivity extends Activity {
         image_num = it.getExtras().getInt("image_num");
         num = it.getExtras().getInt("num");
         position = it.getExtras().getInt("position");
-        numEditText.setText(""+num);
-        numEditText.setSelection(Integer.toString(num).length());
+
 
         if(position == 0)   //냉동실
         {
@@ -93,7 +94,12 @@ public class FoodUpdateActivity extends Activity {
         groupSpinner = (Spinner) findViewById(R.id.groupSpinner);
         nameEditText = (EditText) findViewById(R.id.nameEditText);
         nameEditText.setText(name_str);
+        nameEditText.setSelection(name_str.length());
         numEditText = (EditText) findViewById(R.id.numText);
+        if(num != 0) {
+            numEditText.setText("" + num);
+            numEditText.setSelection(Integer.toString(num).length());
+        }
         nameSpinner = (Spinner) findViewById(R.id.nameSpinner);
 
         purDateBtn = (Button) findViewById(R.id.purDateBtn);
@@ -107,19 +113,36 @@ public class FoodUpdateActivity extends Activity {
         nameStrArr = getResources().getStringArray(tmp_arrayNum);
         nameAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, nameStrArr);
         nameSpinner.setAdapter(nameAdapter);
-        nameSpinner.setSelection(nameStrArr.length-1);
         shelf_index1 = image_num;
+
 
         nameSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                Log.e("onItemSelected : ", nameAdapter.getItem(i).toString());
-                name_str = nameAdapter.getItem(i).toString();
-                nameEditText.setText(name_str);
-                nameEditText.setSelection(name_str.length());
-                shelf_index2 = i;
-                shelf_num = shelf_index1 + shelf_index2;
-                Log.e("good", shelfStrArr[shelf_num].toString());
+                Log.e("good", "nameSpinner");
+                if(!nameSpinnerFirstCall)
+                {
+                    Log.e("onItemSelected : ", nameAdapter.getItem(i).toString());
+                    if(nameAdapter.getItem(i).toString().compareTo("기타") == 0) {
+                        name_str="";
+                        nameEditText.setText("");
+                        nameEditText.setSelection(0);
+                    }
+                    else
+                    {
+                        name_str = nameAdapter.getItem(i).toString();
+                        nameEditText.setText(name_str);
+                        nameEditText.setSelection(name_str.length());
+                    }
+                    shelf_index2 = i;
+                    shelf_num = shelf_index1 + shelf_index2;
+                    Log.e("good", shelfStrArr[shelf_num].toString());
+                }
+                else
+                {
+//                    nameEditText.setText(name_str);
+                }
+                nameSpinnerFirstCall = false;
             }
 
             @Override
@@ -148,23 +171,27 @@ public class FoodUpdateActivity extends Activity {
         groupSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                tmp_arrayNum = R.array.spinnerArrayName0 + i;
-                Log.e("tmp_arrayNum : ", ""+tmp_arrayNum);
-                shelf_index2 = 0;
-                shelf_index1 = setShelf_index1(i);
-                shelf_num = shelf_index1 + shelf_index2;
+                Log.e("good", "groupSpinner");
+                if(!groupSpinnerFirstCall) {
+                    tmp_arrayNum = R.array.spinnerArrayName0 + i;
+                    Log.e("tmp_arrayNum : ", "" + tmp_arrayNum);
+                    shelf_index2 = 0;
+                    shelf_index1 = setShelf_index1(i);
+                    shelf_num = shelf_index1 + shelf_index2;
 
-                image_num = i;
-                group_str = groupAdapter.getItem(i).toString();
-                nameStrArr = getResources().getStringArray(tmp_arrayNum);
-                nameAdapter = new ArrayAdapter<String>(FoodUpdateActivity.this, android.R.layout.simple_spinner_dropdown_item, nameStrArr);
-                nameSpinner.setAdapter(nameAdapter);
-                name_str = nameAdapter.getItem(0).toString();
-                nameEditText.setText(name_str);
+                    image_num = i;
+                    group_str = groupAdapter.getItem(i).toString();
+                    nameStrArr = getResources().getStringArray(tmp_arrayNum);
+                    nameAdapter = new ArrayAdapter<String>(FoodUpdateActivity.this, android.R.layout.simple_spinner_dropdown_item, nameStrArr);
+                    nameSpinner.setAdapter(nameAdapter);
+                    name_str = nameAdapter.getItem(0).toString();
+                    nameEditText.setText(name_str);
 
 
-                Log.e("good", "q3 "+Integer.parseInt(shelfStrArr[shelf_num]));
-                setShelfCalen();
+                    Log.e("good", "q3 " + Integer.parseInt(shelfStrArr[shelf_num]));
+                    setShelfCalen();
+                }
+                groupSpinnerFirstCall = false;
 
 
             }
@@ -206,11 +233,12 @@ public class FoodUpdateActivity extends Activity {
                 int num = 0;
                 try
                 {
+                    Log.e("good", "name_str : "+ name_str);
                     if(numEditText.getText().toString().compareTo("") != 0)
                     {
                         num = Integer.parseInt(numEditText.getText().toString());
                     }
-
+                    name_str = nameEditText.getText().toString();
                     if(name_str.compareTo("") == 0)
                     {
                         Toast.makeText(FoodUpdateActivity.this, "식품명을 입력해주세요.", Toast.LENGTH_SHORT).show();
@@ -229,9 +257,10 @@ public class FoodUpdateActivity extends Activity {
                         long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
 
                         item = new FoodItem(group_str, name_str, pur_str, shelf_str, (int) diff, image_num, num, position);
-                        updateFood("http://52.78.88.182/insertFood.php");
+                        updateFood("http://52.78.88.182/updateFood.php");
 
                         Intent intent = new Intent();
+                        intent.putExtra("id", cur_id);
                         intent.putExtra("group", group_str);
                         intent.putExtra("name", name_str);
                         intent.putExtra("purDate", pur_str);
@@ -257,10 +286,17 @@ public class FoodUpdateActivity extends Activity {
 
             }
         });
-
-
-
-
+//        AdapterView.OnItemSelectedListener onItemSelectedListener1 = nameSpinner.getOnItemSelectedListener();
+//        AdapterView.OnItemSelectedListener onItemSelectedListener2 = groupSpinner.getOnItemSelectedListener();
+//        nameSpinner.setOnItemSelectedListener(null);
+//        groupSpinner.setOnItemSelectedListener(null);
+//        new Handler().postDelayed(new Runnable() {
+//            public void run() {
+//                nameSpinner.setSelection(nameStrArr.length-1);
+//            }
+//        }, 100);
+//        groupSpinner.setOnItemSelectedListener(onItemSelectedListener2);
+//        nameSpinner.setOnItemSelectedListener(onItemSelectedListener1);
     }
 
     private DatePickerDialog.OnDateSetListener purDateSetListener = new DatePickerDialog.OnDateSetListener() {
