@@ -33,6 +33,19 @@ public class FoodItem {
         this.isChecked = false;
     }
 
+    public FoodItem (String group, String name, String date, String shelf_life, int d_day, int image, int num, int position, int id) {
+        this.id = id;
+        this.group = group;
+        this.name = name;
+        this.date = date;
+        this.shelf_life = shelf_life;
+        this.d_day = d_day;
+        this.image = image;
+        this.num = num;
+        this.position = position;
+        this.isChecked = false;
+    }
+
     public int getId () { return id; }
     public String getGroup () { return group; }
     public String getName () { return name; }

@@ -54,7 +54,7 @@ public class MainActivity extends AppCompatActivity {
     SectionsPagerAdapter mSectionsPagerAdapter;
 
     public static final int REQUEST_CODE_FOOD_INPUT = 1001;
-    public static final int REQUEST_CODE_FOOD_UPDATE = 1002;
+    public static final int REQUEST_CODE_FOOD_UPDATE = 1003;
 
     final int STATE_FREEZER = 0;
     final int STATE_REFRIGERATOR = 1;
@@ -84,12 +84,15 @@ public class MainActivity extends AppCompatActivity {
 
     ImageButton plusButton;
     FoodItem item;
+    public static FoodItem up_item;
     ImageButton listButton;
     ImageButton removeButton;
     ImageButton moveButton;
     ImageButton cancelButton;
 
     String myJSON;
+
+    public static int view_index;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -691,21 +694,24 @@ public class MainActivity extends AppCompatActivity {
                 gridViewFreezer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        FoodItem t_item = (FoodItem) mAdapter1.getItem(i);
+                        view_index = i;
+                        up_item = (FoodItem) mAdapter1.getItem(i);
+                        Log.e("good", "up_item iD : " + up_item.getId());
                         Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
-                        intent.putExtra("id", t_item.getId());
-                        intent.putExtra("group", t_item.getGroup());
-                        intent.putExtra("name", t_item.getName());
-                        intent.putExtra("purshase_date", t_item.getDate());
-                        intent.putExtra("shelf_life", t_item.getShelf_life());
-                        intent.putExtra("num", t_item.getNum());
-                        intent.putExtra("image_num", t_item.getImage());
-                        intent.putExtra("position", t_item.getPosition());
-                        startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
+                        intent.putExtra("id", up_item.getId());
+                        intent.putExtra("group", up_item.getGroup());
+                        intent.putExtra("name", up_item.getName());
+                        intent.putExtra("purshase_date", up_item.getDate());
+                        intent.putExtra("shelf_life", up_item.getShelf_life());
+                        intent.putExtra("num", up_item.getNum());
+                        intent.putExtra("image_num", up_item.getImage());
+                        intent.putExtra("position", up_item.getPosition());
+
+                        getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
 
 
 
-                        Log.e("good", "gridViewFreezer : "+t_item.getGroup());
+                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
 
                         return false;
                     }
@@ -726,8 +732,24 @@ public class MainActivity extends AppCompatActivity {
                 gridViewRefrigerator.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        FoodItem t_item = (FoodItem) mAdapter2.getItem(i);
-                        Log.e("good", "gridViewRefrigerator : "+t_item.getGroup());
+                        view_index = i;
+                        up_item = (FoodItem) mAdapter2.getItem(i);
+                        Log.e("good", "up_item iD : " + up_item.getId());
+                        Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
+                        intent.putExtra("id", up_item.getId());
+                        intent.putExtra("group", up_item.getGroup());
+                        intent.putExtra("name", up_item.getName());
+                        intent.putExtra("purshase_date", up_item.getDate());
+                        intent.putExtra("shelf_life", up_item.getShelf_life());
+                        intent.putExtra("num", up_item.getNum());
+                        intent.putExtra("image_num", up_item.getImage());
+                        intent.putExtra("position", up_item.getPosition());
+
+                        getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
+
+
+
+                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
 
                         return false;
                     }
@@ -746,8 +768,24 @@ public class MainActivity extends AppCompatActivity {
                 gridViewBasket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                     @Override
                     public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        FoodItem t_item = (FoodItem) mAdapter3.getItem(i);
-                        Log.e("good", "gridViewBasket : "+t_item.getGroup());
+                        view_index = i;
+                        up_item = (FoodItem) mAdapter3.getItem(i);
+                        Log.e("good", "up_item iD : " + up_item.getId());
+                        Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
+                        intent.putExtra("id", up_item.getId());
+                        intent.putExtra("group", up_item.getGroup());
+                        intent.putExtra("name", up_item.getName());
+                        intent.putExtra("purshase_date", up_item.getDate());
+                        intent.putExtra("shelf_life", up_item.getShelf_life());
+                        intent.putExtra("num", up_item.getNum());
+                        intent.putExtra("image_num", up_item.getImage());
+                        intent.putExtra("position", up_item.getPosition());
+
+                        getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
+
+
+
+                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
 
                         return false;
                     }
@@ -766,7 +804,7 @@ public class MainActivity extends AppCompatActivity {
 
     protected void onActivityResult(int requestCode, int resultCode, Intent intent) {
         super.onActivityResult(requestCode, resultCode, intent);
-
+        Log.e("good", "RESULT : "+ requestCode + ", " +  resultCode);
         if (requestCode == REQUEST_CODE_FOOD_INPUT) {
             if (intent == null) {
                 return;
@@ -785,6 +823,48 @@ public class MainActivity extends AppCompatActivity {
 
             item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
             getMaxId("http://52.78.88.182/getMaxFoodId.php");
+        }
+        else if(requestCode == REQUEST_CODE_FOOD_UPDATE)
+        {
+            if (intent == null) {
+                return;
+            }
+            Log.e("good", "REQUEST_CODE_FOOD_UPDATE");
+            int id = intent.getIntExtra("num", 0);
+            String group = intent.getStringExtra("group");
+            String name = intent.getStringExtra("name");
+            String purDate = intent.getStringExtra("purDate");
+            String shelfLife = intent.getStringExtra("shelfLife");
+            int num = intent.getIntExtra("num", 0);
+            int image_num = intent.getIntExtra("image_num", 7);
+            int position = intent.getIntExtra("position", 0);
+            int d_day = intent.getIntExtra("d_day", 0);
+
+            up_item.setGroup(group);
+            up_item.setName(name);
+            up_item.setDate(purDate);
+            up_item.setShelf_life(shelfLife);
+            up_item.setNum(num);
+            up_item.setImage(image_num);
+            up_item.setD_day(d_day);
+
+            if(position == STATE_FREEZER)
+            {
+//                FoodItem f = (FoodItem) foodList1.get(view_index);
+//                Log.e("good", "foodList1 : " + f.getId() + ", "+ up_item.getId());
+                foodList1.set(view_index, up_item);
+                mAdapter1.notifyDataSetChanged();
+            }
+            else if(position == STATE_REFRIGERATOR)
+            {
+                foodList2.set(view_index, up_item);
+                mAdapter2.notifyDataSetChanged();
+            }
+            else
+            {
+                foodList3.set(view_index, up_item);
+                mAdapter3.notifyDataSetChanged();
+            }
         }
     }
 
@@ -957,13 +1037,13 @@ public class MainActivity extends AppCompatActivity {
                 long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelf_calen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
 //
 //                Log.e("jsonerr", "diff : " + (int) diff);
-                FoodItem tmp_item = new FoodItem(group, name, purDate, shelfLife, (int) diff, image_num, num, position);
+                FoodItem tmp_item = new FoodItem(group, name, purDate, shelfLife, (int) diff, image_num, num, position, id);
 //
-                Log.e("jsonerr", id + ", "+ group + ", "+ name + ", "+ purDate + ", "+ shelfLife + ", "+position + ", "+ image_num + ", "+ num+ ", "+ (int)diff);
+//                Log.e("jsonerr", id + ", "+ group + ", "+ name + ", "+ purDate + ", "+ shelfLife + ", "+position + ", "+ image_num + ", "+ num+ ", "+ (int)diff);
 
                 if (position == STATE_FREEZER)
                 {
-                    Log.e("jsonerr", "STATE_FREEZER");
+//                    Log.e("jsonerr", "STATE_FREEZER");
                     if (foodList1 == null){
                         foodList1 = new ArrayList<FoodItem>();
                     }
@@ -976,7 +1056,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (position == STATE_REFRIGERATOR)
                 {
-                    Log.e("jsonerr", "STATE_REFRIGERATOR");
+//                    Log.e("jsonerr", "STATE_REFRIGERATOR");
                     if (foodList2 == null){
                         foodList2 = new ArrayList<FoodItem>();
                     }
@@ -986,7 +1066,7 @@ public class MainActivity extends AppCompatActivity {
                 }
                 else if (position == STATE_BASKET)
                 {
-                    Log.e("jsonerr", "STATE_BASKET");
+//                    Log.e("jsonerr", "STATE_BASKET");
                     if (foodList3 == null){
                         foodList3 = new ArrayList<FoodItem>();
                     }
