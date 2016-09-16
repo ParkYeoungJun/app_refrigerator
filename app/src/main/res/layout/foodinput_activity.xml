@@ -12,8 +12,9 @@
         <TextView
             android:textColor="@android:color/white"
             android:layout_centerInParent="true"
+            android:id="@+id/inputTitle"
             android:textSize="20dp"
-            android:text="식품추가"
+            android:text="식품 추가"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
 

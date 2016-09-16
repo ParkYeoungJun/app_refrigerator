@@ -126,7 +126,6 @@ public class FoodInputActivity extends Activity {
             }
         });
 
-        //listener 추가
         groupStr = getResources().getStringArray(R.array.spinnerArrayGroup);
         groupAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, groupStr);
         groupSpinner.setAdapter(groupAdapter);
@@ -136,35 +135,7 @@ public class FoodInputActivity extends Activity {
                 tmp_arrayNum = R.array.spinnerArrayName0 + i;
                 Log.e("tmp_arrayNum : ", ""+tmp_arrayNum);
                 shelf_index2 = 0;
-                switch (i)
-                {
-                    case 0:
-                        shelf_index1 = 0;
-                        break;
-                    case 1:
-                        shelf_index1 = 5;
-                        break;
-                    case 2:
-                        shelf_index1 = 21;
-                        break;
-                    case 3:
-                        shelf_index1 = 30;
-                        break;
-                    case 4:
-                        shelf_index1 = 55;
-                        break;
-                    case 5:
-                        shelf_index1 = 75;
-                        break;
-                    case 6:
-                        shelf_index1 = 84;
-                        break;
-                    case 7:
-                        shelf_index1 = 92;
-                        break;
-                    default:
-                        break;
-                }
+                shelf_index1 = setShelf_index1(i);
                 shelf_num = shelf_index1 + shelf_index2;
 
                 image_num = i;
@@ -414,5 +385,40 @@ public class FoodInputActivity extends Activity {
         }
         postFoodJSON g = new postFoodJSON();
         g.execute(url);
+    }
+
+    int setShelf_index1(int i)
+    {
+        int ret = 0;
+        switch (i)
+        {
+            case 0:
+                ret = 0;
+                break;
+            case 1:
+                ret = 5;
+                break;
+            case 2:
+                ret = 21;
+                break;
+            case 3:
+                ret = 30;
+                break;
+            case 4:
+                ret = 55;
+                break;
+            case 5:
+                ret = 75;
+                break;
+            case 6:
+                ret = 84;
+                break;
+            case 7:
+                ret = 92;
+                break;
+            default:
+                break;
+        }
+        return ret;
     }
 }
