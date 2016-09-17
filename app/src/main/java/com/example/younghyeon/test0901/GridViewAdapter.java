@@ -5,6 +5,7 @@ package com.example.younghyeon.test0901;
  */
 
 import android.app.Activity;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,8 +14,6 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
@@ -120,7 +119,18 @@ public class GridViewAdapter extends BaseAdapter
         }
 
         final FoodItem curItem = (FoodItem) foodArrayList.get(position);
-        view.txtDDay.setText("D-" + curItem.getD_day());
+        int cur_dDay = curItem.getD_day();
+        if(cur_dDay >= 0) {
+            view.txtDDay.setText("D-" + curItem.getD_day());
+            if(0 <= cur_dDay && cur_dDay <= 2)
+            {
+                view.txtDDay.setTextColor(Color.BLUE);
+            }
+        }
+        else {
+            view.txtDDay.setText("D+" + Math.abs(cur_dDay));
+            view.txtDDay.setTextColor(Color.RED);
+        }
         view.txtViewTitle.setText(curItem.getName());
         view.imgViewFlag.setImageResource(getDrawableId(curItem.getImage()));
 

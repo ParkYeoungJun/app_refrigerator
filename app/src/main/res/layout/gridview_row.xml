@@ -41,6 +41,7 @@
         android:layout_below="@+id/grid_image"
         android:layout_marginTop="2dp"
         android:layout_centerHorizontal="true"
+        android:maxLines="1"
         android:textSize="15dp"
         android:ellipsize="marquee">
     </TextView>

@@ -124,6 +124,7 @@ public class FoodInputActivity extends Activity {
                 }
                 shelf_index2 = i;
                 shelf_num = shelf_index1 + shelf_index2;
+                Log.e("good", "shelf_num : " + shelf_num);
                 Log.e("good", shelfStrArr[shelf_num].toString());
                 setShelfCalen();
             }
@@ -153,7 +154,7 @@ public class FoodInputActivity extends Activity {
                 nameSpinner.setAdapter(nameAdapter);
                 name_str = nameAdapter.getItem(0).toString();
                 nameEditText.setText(name_str);
-
+                Log.e("good", "shelf_num : " + shelf_num);
                 Log.e("good", "q3 "+Integer.parseInt(shelfStrArr[shelf_num]));
                 setShelfCalen();
 
@@ -222,7 +223,7 @@ public class FoodInputActivity extends Activity {
                         tmp_calen.set(Calendar.SECOND, 0);
                         tmp_calen.set(Calendar.MILLISECOND, 0);
 
-                        long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
+                        long diff = TimeUnit.MILLISECONDS.toDays(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis());
 
                         item = new FoodItem(group_str, name_str, pur_str, shelf_str, (int) diff, image_num, num, position);
                         postFood("http://52.78.88.182/insertFood.php");

@@ -26,12 +26,9 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -101,9 +98,7 @@ public class MainActivity extends AppCompatActivity {
 
     boolean isShelfOder;
 
-    FoodItem movItem;
-    int mov_id;
-    int mov_pos;
+//    FoodItem movItem;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -148,6 +143,7 @@ public class MainActivity extends AppCompatActivity {
                         public void onClick(DialogInterface dialogInterface, int i) {
                             int tempArraySize = 0;
                             int cnt = 0;
+                            int mov_pos;
                             if(i==0) {
                                 mov_pos = 1;
                             }
@@ -160,12 +156,13 @@ public class MainActivity extends AppCompatActivity {
                                 int[] tempArray = mAdapter1.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
-                                    movItem = (FoodItem) foodList1.get(tempArray[j] + cnt);
+                                    FoodItem movItem = (FoodItem) foodList1.get(tempArray[j] + cnt);
                                     if(i==0)
                                         foodList2.add(movItem);
                                     else
                                         foodList3.add(movItem);
-                                    moveFood("http://52.78.88.182/moveFood.php");
+                                    Log.e("good", "movItem id! : "+movItem.getId());
+                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
                                     foodList1.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
@@ -193,6 +190,8 @@ public class MainActivity extends AppCompatActivity {
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
+//                            Log.e("good", "장바구니");
+                            int mov_pos;
                             if(i==0) {
                                 mov_pos = 0;
                             }
@@ -206,13 +205,13 @@ public class MainActivity extends AppCompatActivity {
                                 int[] tempArray = mAdapter2.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
-                                    movItem = (FoodItem) foodList2.get(tempArray[j] + cnt);
+                                    FoodItem movItem = (FoodItem) foodList2.get(tempArray[j] + cnt);
 
                                     if(i==0)
                                         foodList1.add(movItem);
                                     else
                                         foodList3.add(movItem);
-                                    moveFood("http://52.78.88.182/moveFood.php");
+                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
                                     foodList2.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
@@ -234,31 +233,33 @@ public class MainActivity extends AppCompatActivity {
                     builder.create();
                     builder.show();
                 }
-                else
-                {
+                else if (state == STATE_BASKET) {
                     final CharSequence[] items = {"냉동실로 이동", "냉장실로 이동"};
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
-                            int tempArraySize = 0;
-                            int cnt = 0;
+                            Log.e("good", "장바구니");
+                            int mov_pos;
                             if(i==0) {
                                 mov_pos = 0;
                             }
                             else {
                                 mov_pos = 1;
                             }
+                            int tempArraySize = 0;
+                            int cnt = 0;
                             if (mAdapter3.getCheck() == true)
                             {
                                 int[] tempArray = mAdapter3.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
-                                    movItem = (FoodItem) foodList3.get(tempArray[j] + cnt);
+                                    FoodItem movItem = (FoodItem) foodList3.get(tempArray[j] + cnt);
+
                                     if(i==0)
                                         foodList1.add(movItem);
                                     else
                                         foodList2.add(movItem);
-                                    moveFood("http://52.78.88.182/moveFood.php");
+                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
                                     foodList3.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
@@ -270,6 +271,7 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 sortFoodArray(1);
                             }
+
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
                             mAdapter3.notifyDataSetChanged();
@@ -278,8 +280,8 @@ public class MainActivity extends AppCompatActivity {
                     });
                     builder.create();
                     builder.show();
-
                 }
+
 
             }
         });
@@ -290,52 +292,116 @@ public class MainActivity extends AppCompatActivity {
             // 아무 식품을 만들지 않고 삭제버튼 누르면 애러남
             @Override
             public void onClick(View view) {
-                int tempArraySize = 0;
-                int cnt = 0;
-                if (mAdapter1.getCheck() == true) {
-                    int[] tempArray = mAdapter1.getCheckedPosition();
-                    tempArraySize = tempArray[0];
-                    for (int i = 1; i <= tempArraySize; i++) {
-                        FoodItem delFood = (FoodItem) foodList1.get(tempArray[i] + cnt);
-                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
-                        foodList1.remove(tempArray[i] + cnt);
-                        cnt--;
+                AlertDialog.Builder alert_confirm = new AlertDialog.Builder(MainActivity.this);
+                alert_confirm.setMessage("정말로 삭제하시겠습니까?").
+                        setCancelable(false).setPositiveButton("확인",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                int tempArraySize = 0;
+                                int cnt = 0;
+                                if (mAdapter1.getCheck() == true) {
+                                    int[] tempArray = mAdapter1.getCheckedPosition();
+                                    tempArraySize = tempArray[0];
+                                    for (int i = 1; i <= tempArraySize; i++) {
+                                        FoodItem delFood = (FoodItem) foodList1.get(tempArray[i] + cnt);
+                                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                                        foodList1.remove(tempArray[i] + cnt);
+                                        cnt--;
 
-                    }
-                    mAdapter1.setCheck(false);
-                    mAdapter1.notifyDataSetChanged();
-                }
-                else if (mAdapter2.getCheck() == true)
-                {
-                    int[] tempArray = mAdapter2.getCheckedPosition();
-                    tempArraySize = tempArray[0];
-                    for (int i = 1; i <= tempArraySize; i++) {
-                        FoodItem delFood = (FoodItem) foodList2.get(tempArray[i] + cnt);
+                                    }
+                                    mAdapter1.setCheck(false);
+                                    mAdapter1.notifyDataSetChanged();
+                                }
+                                else if (mAdapter2.getCheck() == true)
+                                {
+                                    int[] tempArray = mAdapter2.getCheckedPosition();
+                                    tempArraySize = tempArray[0];
+                                    for (int i = 1; i <= tempArraySize; i++) {
+                                        FoodItem delFood = (FoodItem) foodList2.get(tempArray[i] + cnt);
 //                        Log.e("good", "del id : "+ delFood.getId());
-                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
-                        foodList2.remove(tempArray[i] + cnt);
-                        cnt--;
+                                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                                        foodList2.remove(tempArray[i] + cnt);
+                                        cnt--;
 
-                    }
-                    mAdapter2.setCheck(false);
-                    mAdapter2.notifyDataSetChanged();
-                }
-                else if (mAdapter3.getCheck() == true)
-                {
-                    int[] tempArray = mAdapter3.getCheckedPosition();
-                    tempArraySize = tempArray[0];
-                    for (int i = 1; i <= tempArraySize; i++) {
-                        FoodItem delFood = (FoodItem) foodList3.get(tempArray[i] + cnt);
+                                    }
+                                    mAdapter2.setCheck(false);
+                                    mAdapter2.notifyDataSetChanged();
+                                }
+                                else if (mAdapter3.getCheck() == true)
+                                {
+                                    int[] tempArray = mAdapter3.getCheckedPosition();
+                                    tempArraySize = tempArray[0];
+                                    for (int i = 1; i <= tempArraySize; i++) {
+                                        FoodItem delFood = (FoodItem) foodList3.get(tempArray[i] + cnt);
 //                        Log.e("good", "del id : "+ delFood.getId());
-                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
-                        foodList3.remove(tempArray[i] + cnt);
-                        cnt--;
+                                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                                        foodList3.remove(tempArray[i] + cnt);
+                                        cnt--;
 
-                    }
-                    mAdapter3.setCheck(false);
-                    mAdapter3.notifyDataSetChanged();
-                }
-                setVisibleToCheckOff();
+                                    }
+                                    mAdapter3.setCheck(false);
+                                    mAdapter3.notifyDataSetChanged();
+                                }
+                                setVisibleToCheckOff();
+                            }
+                        }).setNegativeButton("취소",
+                        new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Log.e("jsonerr", "No");
+                                return;
+                            }
+                        });
+                AlertDialog alert = alert_confirm.create();
+                alert.show();
+
+//                int tempArraySize = 0;
+//                int cnt = 0;
+//                if (mAdapter1.getCheck() == true) {
+//                    int[] tempArray = mAdapter1.getCheckedPosition();
+//                    tempArraySize = tempArray[0];
+//                    for (int i = 1; i <= tempArraySize; i++) {
+//                        FoodItem delFood = (FoodItem) foodList1.get(tempArray[i] + cnt);
+//                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+//                        foodList1.remove(tempArray[i] + cnt);
+//                        cnt--;
+//
+//                    }
+//                    mAdapter1.setCheck(false);
+//                    mAdapter1.notifyDataSetChanged();
+//                }
+//                else if (mAdapter2.getCheck() == true)
+//                {
+//                    int[] tempArray = mAdapter2.getCheckedPosition();
+//                    tempArraySize = tempArray[0];
+//                    for (int i = 1; i <= tempArraySize; i++) {
+//                        FoodItem delFood = (FoodItem) foodList2.get(tempArray[i] + cnt);
+////                        Log.e("good", "del id : "+ delFood.getId());
+//                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+//                        foodList2.remove(tempArray[i] + cnt);
+//                        cnt--;
+//
+//                    }
+//                    mAdapter2.setCheck(false);
+//                    mAdapter2.notifyDataSetChanged();
+//                }
+//                else if (mAdapter3.getCheck() == true)
+//                {
+//                    int[] tempArray = mAdapter3.getCheckedPosition();
+//                    tempArraySize = tempArray[0];
+//                    for (int i = 1; i <= tempArraySize; i++) {
+//                        FoodItem delFood = (FoodItem) foodList3.get(tempArray[i] + cnt);
+////                        Log.e("good", "del id : "+ delFood.getId());
+//                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+//                        foodList3.remove(tempArray[i] + cnt);
+//                        cnt--;
+//
+//                    }
+//                    mAdapter3.setCheck(false);
+//                    mAdapter3.notifyDataSetChanged();
+//                }
+//                setVisibleToCheckOff();
             }
         });
 
@@ -683,11 +749,11 @@ public class MainActivity extends AppCompatActivity {
             up_item.setImage(image_num);
             up_item.setD_day(d_day);
 
-            Comparator<FoodItem> FoodComparator = new Comparator<FoodItem> () {
-                public int compare(FoodItem f1, FoodItem f2) {
-                    return f1.getShelf_life().compareTo(f2.getShelf_life());
-                }
-            };
+//            Comparator<FoodItem> FoodComparator = new Comparator<FoodItem> () {
+//                public int compare(FoodItem f1, FoodItem f2) {
+//                    return f1.getShelf_life().compareTo(f2.getShelf_life());
+//                }
+//            };
 
 
             if(position == STATE_FREEZER)
@@ -696,7 +762,7 @@ public class MainActivity extends AppCompatActivity {
 //                Log.e("good", "foodList1 : " + f.getId() + ", "+ up_item.getId());
                 foodList1.set(view_index, up_item);
 
-                sortFoodArray(position);
+                sortFoodArray(0);
                 mAdapter1.notifyDataSetChanged();
 
             }
@@ -704,14 +770,14 @@ public class MainActivity extends AppCompatActivity {
             {
                 foodList2.set(view_index, up_item);
 
-                sortFoodArray(position);
+                sortFoodArray(1);
                 mAdapter2.notifyDataSetChanged();
             }
             else
             {
                 foodList3.set(view_index, up_item);
 
-                sortFoodArray(position);
+                sortFoodArray(2);
                 mAdapter3.notifyDataSetChanged();
             }
         }
@@ -883,7 +949,7 @@ public class MainActivity extends AppCompatActivity {
                 tmp_calen.set(Calendar.SECOND, 0);
                 tmp_calen.set(Calendar.MILLISECOND, 0);
 //
-                long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelf_calen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
+                long diff = TimeUnit.MILLISECONDS.toDays(shelf_calen.getTimeInMillis() - tmp_calen.getTimeInMillis());
 //
 //                Log.e("jsonerr", "diff : " + (int) diff);
                 FoodItem tmp_item = new FoodItem(group, name, purDate, shelfLife, (int) diff, image_num, num, position, id);
@@ -892,7 +958,6 @@ public class MainActivity extends AppCompatActivity {
 
                 if (position == STATE_FREEZER)
                 {
-//                    Log.e("jsonerr", "STATE_FREEZER");
                     if (foodList1 == null){
 //                        foodList1 = new ArrayList<FoodItem>();
                         mAdapter1.foodArrayList = foodList1;
@@ -947,7 +1012,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(String... params) {
-
                 String uri = params[0];
 //                Log.e("jsonerr", "delete" + 1);
                 BufferedReader bufferedReader = null;
@@ -985,55 +1049,22 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             protected String doInBackground(String... params) {
+                String uri = params[0];
+//                Log.e("jsonerr", "delete" + 1);
+                BufferedReader bufferedReader = null;
                 try {
-                    String uri = params[0];
-                    JSONObject jsonObj = new JSONObject();
-                    jsonObj.put("id", movItem.getId());
-                    jsonObj.put("position", mov_pos);
-
-                    BufferedWriter bufferedWriter = null;
-                    Log.e("jsonerr", "write_json0 : " + jsonObj.toString());
                     URL url = new URL(uri);
                     HttpURLConnection con = (HttpURLConnection) url.openConnection();
                     StringBuilder sb = new StringBuilder();
-                    Log.e("jsonerr", "write_json1 : " + jsonObj.toString());
-                    con.setDoOutput(true);
-                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
 
-                    String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonObj.toString();
-
-                    OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
-                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
-//                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령
-                    wr.write(data);
-//                    Log.e("jsonerr", "write() : ");
-
-                    wr.flush();
-
-                    //OutputStream os = con.getOutputStream();
-                    Log.e("jsonerr", "write_json6 : " + jsonObj.toString());
-                    //BufferedWriter writer = new BufferedWriter(
-                    //      new OutputStreamWriter(os, "UTF-8"));
-                    Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
-                    //os.write(jsonObj.toString().getBytes());
-
-//                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
-//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
-
-//                    bufferedWriter.write(jsonObj);
-                    //bufferedWriter.write(jsonObj.toString());
-                    Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
-//                    String json;
-//                    while((json = bufferedReader.readLine())!= null){
-//                        sb.append(json+"\n");
-//                    }
-
-                    BufferedReader reader=new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String line=null;
-                    while((line=reader.readLine())!=null){
-                        //서버응답값을 String 형태로 추가함
-                        Log.e("jsonerr", "Read : " + line+"\n");
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//                    Log.e("jsonerr", "delete" + 23);
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
                     }
+//                    Log.e("jsonerr", "delete" + 4);
+//                    Log.e("jsonerr", "delete" + 2);
                     return sb.toString().trim();
 
                 }catch(Exception e){

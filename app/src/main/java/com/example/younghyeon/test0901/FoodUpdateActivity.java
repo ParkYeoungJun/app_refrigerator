@@ -133,10 +133,13 @@ public class FoodUpdateActivity extends Activity {
                         name_str = nameAdapter.getItem(i).toString();
                         nameEditText.setText(name_str);
                         nameEditText.setSelection(name_str.length());
+                        shelf_index2 = i;
+                        shelf_num = shelf_index1 + shelf_index2;
+                        Log.e("good", "shelf_num : " + shelf_num);
+                        Log.e("good", "shelf_num name : " + shelfStrArr[shelf_num].toString());
+                        setShelfCalen();
                     }
-                    shelf_index2 = i;
-                    shelf_num = shelf_index1 + shelf_index2;
-                    Log.e("good", shelfStrArr[shelf_num].toString());
+
                 }
                 else
                 {
@@ -254,7 +257,7 @@ public class FoodUpdateActivity extends Activity {
                         tmp_calen.set(Calendar.SECOND, 0);
                         tmp_calen.set(Calendar.MILLISECOND, 0);
 
-                        long diff = TimeUnit.MILLISECONDS.toDays(Math.abs(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis()));
+                        long diff = TimeUnit.MILLISECONDS.toDays(shelfCalen.getTimeInMillis() - tmp_calen.getTimeInMillis());
 
                         item = new FoodItem(group_str, name_str, pur_str, shelf_str, (int) diff, image_num, num, position);
                         updateFood("http://52.78.88.182/updateFood.php");

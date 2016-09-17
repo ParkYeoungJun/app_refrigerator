@@ -28,6 +28,13 @@
             android:background="@drawable/home_button2"/>
 
         <ImageButton
+            android:layout_width="38dp"
+            android:layout_height="38dp"
+            android:id="@+id/orderBtn"
+            android:layout_toLeftOf="@+id/homeButton"
+            android:background="@drawable/"/>/>
+
+        <ImageButton
             android:id="@+id/moveButton"
             android:layout_marginTop="5dp"
             android:layout_toLeftOf="@+id/removeButton"
