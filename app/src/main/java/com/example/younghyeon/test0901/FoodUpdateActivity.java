@@ -209,7 +209,7 @@ public class FoodUpdateActivity extends Activity {
         purDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(FoodUpdateActivity.this, purDateSetListener, purCalen.get(Calendar.YEAR),
+                new DatePickerDialog(FoodUpdateActivity.this, android.R.style.Theme_Holo_Dialog, purDateSetListener, purCalen.get(Calendar.YEAR),
                         purCalen.get(Calendar.MONTH), purCalen.get(Calendar.DAY_OF_MONTH)).show();
 
             }
@@ -218,7 +218,7 @@ public class FoodUpdateActivity extends Activity {
         shelDateBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new DatePickerDialog(FoodUpdateActivity.this, shelfDateSetListener, shelfCalen.get(Calendar.YEAR),
+                new DatePickerDialog(FoodUpdateActivity.this, android.R.style.Theme_Holo_Dialog, shelfDateSetListener, shelfCalen.get(Calendar.YEAR),
                         shelfCalen.get(Calendar.MONTH), shelfCalen.get(Calendar.DAY_OF_MONTH)).show();
             }
         });
