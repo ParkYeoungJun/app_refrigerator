@@ -90,6 +90,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton listButton;
     ImageButton removeButton;
     ImageButton moveButton;
+    ImageButton orderButton;
     ImageButton cancelButton;
 
     String myJSON;
@@ -126,6 +127,31 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3); // 페이지 저장 3개까지
+
+        orderButton = (ImageButton) findViewById(R.id.orderBtn);
+        orderButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if(!isShelfOder) {
+                    isShelfOder = true;
+
+                    orderButton.setBackgroundResource(R.drawable.order_name);
+                }
+                else {
+                    isShelfOder = false;
+                    orderButton.setBackgroundResource(R.drawable.order_shelf);
+                }
+
+                sortFoodArray(0);
+                sortFoodArray(1);
+                sortFoodArray(2);
+                mAdapter1.notifyDataSetChanged();
+                mAdapter2.notifyDataSetChanged();
+                mAdapter3.notifyDataSetChanged();
+            }
+        });
+
+
 
         moveButton = (ImageButton) findViewById(R.id.moveButton);
         moveButton.setVisibility(View.INVISIBLE);
