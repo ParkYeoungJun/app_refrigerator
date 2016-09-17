@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "159633043184",
+    "firebase_url": "https://bbyu-4ca9f.firebaseio.com",
+    "project_id": "bbyu-4ca9f",
+    "storage_bucket": "bbyu-4ca9f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:159633043184:android:02e2f32d6ef1f8a4",
+        "android_client_info": {
+          "package_name": "com.example.younghyeon.test0901"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "159633043184-u2c7o2bj508vncljc850q22atb8j584v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAQLcKsjvQfPKjKIEt5SGKQ3wHr48tkCmI"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

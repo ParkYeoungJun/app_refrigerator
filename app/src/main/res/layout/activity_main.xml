@@ -34,7 +34,7 @@
             android:layout_height="38dp"
             android:id="@+id/orderBtn"
             android:layout_toRightOf="@+id/homeButton"
-            android:background="@drawable/order_shelf"/>
+            android:background="@drawable/order_name"/>
 
         <ImageButton
             android:id="@+id/moveButton"
