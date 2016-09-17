@@ -107,6 +107,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter1 = new GridViewAdapter(MainActivity.this);
         mAdapter2 = new GridViewAdapter(MainActivity.this);
         mAdapter3 = new GridViewAdapter(MainActivity.this);
+//        mAdapter1 = new GridViewAdapter(MainActivity.this, );
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
@@ -236,9 +237,9 @@ public class MainActivity extends AppCompatActivity {
                                         FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada, 0, 1);
                                         if (foodList1 == null) {
                                             foodList1 = new ArrayList<FoodItem>();
+                                            mAdapter1.foodArrayList = foodList1;
                                         }
                                         foodList1.add(item);
-                                        mAdapter1.foodArrayList = foodList1;
                                         mAdapter1.notifyDataSetChanged();
 
                                         mAdapter2.foodArrayList.remove(tempArray[a] + cnt);
@@ -272,9 +273,9 @@ public class MainActivity extends AppCompatActivity {
                                         FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.canada, 0, 1);
                                         if (foodList3 == null) {
                                             foodList3 = new ArrayList<FoodItem>();
+                                            mAdapter3.foodArrayList = foodList3;
                                         }
                                         foodList3.add(item);
-                                        mAdapter3.foodArrayList = foodList3;
                                         mAdapter3.notifyDataSetChanged();
 
                                         mAdapter2.foodArrayList.remove(tempArray[a] + cnt);
@@ -322,9 +323,9 @@ public class MainActivity extends AppCompatActivity {
                                         FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil, 0, 1);
                                         if (foodList1 == null) {
                                             foodList1 = new ArrayList<FoodItem>();
+                                            mAdapter1.foodArrayList = foodList1;
                                         }
                                         foodList1.add(item);
-                                        mAdapter1.foodArrayList = foodList1;
                                         mAdapter1.notifyDataSetChanged();
 
                                         mAdapter3.foodArrayList.remove(tempArray[a] + cnt);
@@ -358,9 +359,9 @@ public class MainActivity extends AppCompatActivity {
                                         FoodItem item = new FoodItem("몰라", str, "", "", 3, R.drawable.brazil, 0, 1);
                                         if (foodList2 == null) {
                                             foodList2 = new ArrayList<FoodItem>();
+                                            mAdapter2.foodArrayList = foodList2;
                                         }
                                         foodList2.add(item);
-                                        mAdapter2.foodArrayList = foodList2;
                                         mAdapter2.notifyDataSetChanged();
 
                                         mAdapter3.foodArrayList.remove(tempArray[a] + cnt);
@@ -390,49 +391,47 @@ public class MainActivity extends AppCompatActivity {
             // 아무 식품을 만들지 않고 삭제버튼 누르면 애러남
             @Override
             public void onClick(View view) {
+                int tempArraySize = 0;
+                int cnt = 0;
                 if (mAdapter1.getCheck() == true) {
-                    int tempArraySize = 0;
-                    int index = 0;
-                    int cnt = 0;
-                    index = mAdapter1.foodArrayList.size();
-                    int[] tempArray = new int[index];
-                    tempArray = mAdapter1.getCheckedPosition();
+                    int[] tempArray = mAdapter1.getCheckedPosition();
                     tempArraySize = tempArray[0];
                     for (int i = 1; i <= tempArraySize; i++) {
-                        mAdapter1.foodArrayList.remove(tempArray[i] + cnt);
+                        FoodItem delFood = (FoodItem) foodList1.get(tempArray[i] + cnt);
+                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                        foodList1.remove(tempArray[i] + cnt);
                         cnt--;
+
                     }
                     mAdapter1.setCheck(false);
                     mAdapter1.notifyDataSetChanged();
 
                     setVisibleToCheckOff();
                 } else if (mAdapter2.getCheck() == true){
-                    int tempArraySize = 0;
-                    int index = 0;
-                    int cnt = 0;
-                    index = mAdapter2.foodArrayList.size();
-                    int[] tempArray = new int[index];
-                    tempArray = mAdapter2.getCheckedPosition();
+                    int[] tempArray = mAdapter2.getCheckedPosition();
                     tempArraySize = tempArray[0];
                     for (int i = 1; i <= tempArraySize; i++) {
-                        mAdapter2.foodArrayList.remove(tempArray[i] + cnt);
+                        FoodItem delFood = (FoodItem) foodList2.get(tempArray[i] + cnt);
+//                        Log.e("good", "del id : "+ delFood.getId());
+                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                        foodList2.remove(tempArray[i] + cnt);
                         cnt--;
+
                     }
                     mAdapter2.setCheck(false);
                     mAdapter2.notifyDataSetChanged();
 
                     setVisibleToCheckOff();
                 }else if (mAdapter3.getCheck() == true){
-                    int tempArraySize = 0;
-                    int index = 0;
-                    int cnt = 0;
-                    index = mAdapter3.foodArrayList.size();
-                    int[] tempArray = new int[index];
-                    tempArray = mAdapter3.getCheckedPosition();
+                    int[] tempArray = mAdapter3.getCheckedPosition();
                     tempArraySize = tempArray[0];
                     for (int i = 1; i <= tempArraySize; i++) {
-                        mAdapter3.foodArrayList.remove(tempArray[i] + cnt);
+                        FoodItem delFood = (FoodItem) foodList3.get(tempArray[i] + cnt);
+//                        Log.e("good", "del id : "+ delFood.getId());
+                        deleteFood("http://52.78.88.182/deleteFood.php?id=" + delFood.getId());
+                        foodList3.remove(tempArray[i] + cnt);
                         cnt--;
+
                     }
                     mAdapter3.setCheck(false);
                     mAdapter3.notifyDataSetChanged();
@@ -518,42 +517,12 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 Intent intent = new Intent(MainActivity.this, FoodInputActivity.class);
-//                state = mViewPager.getCurrentItem();
                 intent.putExtra("position", mViewPager.getCurrentItem());
                 startActivityForResult(intent, REQUEST_CODE_FOOD_INPUT);
 
-
-//                if (state==STATE_FREEZER) {
-//                    if (foodList1 == null){
-//                        foodList1 = new ArrayList<FoodItem>();
-//                    }
-////                    FoodItem item = new FoodItem("몰라", "한국 " + i, "", "", 3, R.drawable.korea, 0, 1);
-//                    foodList1.add(item);
-//                    mAdapter1.foodArrayList = foodList1;
-//                    mAdapter1.notifyDataSetChanged();
-//                }
-//                else if (state==STATE_REFRIGERATOR) {
-//                    if (foodList2 == null){
-//                        foodList2 = new ArrayList<FoodItem>();
-//                    }
-//                    FoodItem item = new FoodItem("몰라", "캐나다" + i, "", "", 3, R.drawable.canada, 0, 1);
-//                    foodList2.add(item);
-//                    mAdapter2.foodArrayList = foodList2;
-//                    mAdapter2.notifyDataSetChanged();
-//                }
-//                else if (state==STATE_BASKET){
-//                    if (foodList3 == null){
-//                        foodList3 = new ArrayList<FoodItem>();
-//                    }
-//                    FoodItem item = new FoodItem("몰라", "브라질" + i, "", "", 3, R.drawable.brazil, 0, 1);
-//                    foodList3.add(item);
-//                    mAdapter3.foodArrayList = foodList3;
-//                    mAdapter3.notifyDataSetChanged();
-//                }
-//                i++;
             }
         });
-        Log.e("good", "hi");
+//        Log.e("good", "hi");
         getFood("http://52.78.88.182/getFood.php");
     }
 
@@ -672,6 +641,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
                                  Bundle savedInstanceState) {
+
             Log.e("jsonerr", "onCreateView");
             int i = getArguments().getInt(ARG_SECTION_NUMBER);
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
@@ -695,11 +665,11 @@ public class MainActivity extends AppCompatActivity {
 //                mAdapter1 = new GridViewAdapter(getActivity());
                 Log.e("Main", "GridView : hi");
                 gridViewFreezer.setAdapter(mAdapter1);
-                gridViewFreezer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        view_index = i;
-                        up_item = (FoodItem) mAdapter1.getItem(i);
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                        view_index = position;
+                        up_item = (FoodItem) mAdapter1.getItem(position);
                         Log.e("good", "up_item iD : " + up_item.getId());
                         Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
                         intent.putExtra("id", up_item.getId());
@@ -712,32 +682,19 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("position", up_item.getPosition());
 
                         getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
-
-
-
-                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
-
-                        return false;
                     }
                 });
-//                gridViewFreezer.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-//                                            long arg3) {
-//                    }
-//                });
-                mAdapter1.notifyDataSetChanged();
                 return rootView;
             }
             else if (i == 2) {
                 gridViewRefrigerator = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter2 = new GridViewAdapter(getActivity());
                 gridViewRefrigerator.setAdapter(mAdapter2);
-                gridViewRefrigerator.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        view_index = i;
-                        up_item = (FoodItem) mAdapter2.getItem(i);
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                        view_index = position;
+                        up_item = (FoodItem) mAdapter2.getItem(position);
                         Log.e("good", "up_item iD : " + up_item.getId());
                         Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
                         intent.putExtra("id", up_item.getId());
@@ -750,30 +707,18 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("position", up_item.getPosition());
 
                         getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
-
-
-
-                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
-
-                        return false;
                     }
                 });
-//                gridViewRefrigerator.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-//                                            long arg3) {
-//                    }
-//                });
                 return rootView;
             } else if (i == 3) {
                 gridViewBasket = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter3 = new GridViewAdapter(getActivity());
                 gridViewBasket.setAdapter(mAdapter3);
-                gridViewBasket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
-                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
-                        view_index = i;
-                        up_item = (FoodItem) mAdapter3.getItem(i);
+                    public void onItemClick(AdapterView<?> arg0, View arg1, int position, long arg3) {
+                        view_index = position;
+                        up_item = (FoodItem) mAdapter3.getItem(position);
                         Log.e("good", "up_item iD : " + up_item.getId());
                         Intent intent = new Intent(getActivity(), FoodUpdateActivity.class);
                         intent.putExtra("id", up_item.getId());
@@ -786,20 +731,8 @@ public class MainActivity extends AppCompatActivity {
                         intent.putExtra("position", up_item.getPosition());
 
                         getActivity().startActivityForResult(intent, REQUEST_CODE_FOOD_UPDATE);
-
-
-
-                        Log.e("good", "gridViewFreezer : "+up_item.getGroup());
-
-                        return false;
                     }
                 });
-//                gridViewBasket.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//                    @Override
-//                    public void onItemClick(AdapterView<?> arg0, View arg1, int position,
-//                                            long arg3) {
-//                    }
-//                });
                 return rootView;
             }
             return rootView;
@@ -995,10 +928,10 @@ public class MainActivity extends AppCompatActivity {
                         {
                             if (foodList1 == null){
                                 foodList1 = new ArrayList<FoodItem>();
+                                mAdapter1.foodArrayList = foodList1;
                             }
 
                             foodList1.add(item);
-                            mAdapter1.foodArrayList = foodList1;
                             mAdapter1.notifyDataSetChanged();
                             Log.e("good", "item id : " + item.getId());
 
@@ -1007,18 +940,18 @@ public class MainActivity extends AppCompatActivity {
                         {
                             if (foodList2 == null){
                                 foodList2 = new ArrayList<FoodItem>();
+                                mAdapter2.foodArrayList = foodList2;
                             }
                             foodList2.add(item);
-                            mAdapter2.foodArrayList = foodList2;
                             mAdapter2.notifyDataSetChanged();
                         }
                         else if (_position == STATE_BASKET)
                         {
                             if (foodList3 == null){
                                 foodList3 = new ArrayList<FoodItem>();
+                                mAdapter3.foodArrayList = foodList3;
                             }
                             foodList3.add(item);
-                            mAdapter3.foodArrayList = foodList3;
                             mAdapter3.notifyDataSetChanged();
                         }
 
@@ -1121,10 +1054,11 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.e("jsonerr", "STATE_FREEZER");
                     if (foodList1 == null){
                         foodList1 = new ArrayList<FoodItem>();
+                        mAdapter1.foodArrayList = foodList1;
                     }
 //
                     foodList1.add(tmp_item);
-                    mAdapter1.foodArrayList = foodList1;
+//                    mAdapter1.foodArrayList = foodList1;
 //                    mAdapter1.notifyDataSetChanged();
 //                    Log.e("good", "item id : " + item.getId());
 //
@@ -1134,9 +1068,9 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.e("jsonerr", "STATE_REFRIGERATOR");
                     if (foodList2 == null){
                         foodList2 = new ArrayList<FoodItem>();
+                        mAdapter2.foodArrayList = foodList2;
                     }
                     foodList2.add(tmp_item);
-                    mAdapter2.foodArrayList = foodList2;
 //                    mAdapter2.notifyDataSetChanged();
                 }
                 else if (position == STATE_BASKET)
@@ -1144,17 +1078,17 @@ public class MainActivity extends AppCompatActivity {
 //                    Log.e("jsonerr", "STATE_BASKET");
                     if (foodList3 == null){
                         foodList3 = new ArrayList<FoodItem>();
+                        mAdapter3.foodArrayList = foodList3;
                     }
                     foodList3.add(tmp_item);
-                    mAdapter3.foodArrayList = foodList3;
 //                    mAdapter3.notifyDataSetChanged();
                 }
             }
 //            mAdapter1.foodArrayList = foodList1;
             mAdapter1.notifyDataSetChanged();
-//            mAdapter2.foodArrayList = foodList1;
+//            mAdapter2.foodArrayList = foodList2;
             mAdapter2.notifyDataSetChanged();
-//            mAdapter3.foodArrayList = foodList1;
+//            mAdapter3.foodArrayList = foodList3;
             mAdapter3.notifyDataSetChanged();
 
         }catch (JSONException e) {
@@ -1165,6 +1099,43 @@ public class MainActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+    }
+
+    public void deleteFood(String url){
+        class deleteFoodJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String uri = params[0];
+//                Log.e("jsonerr", "delete" + 1);
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+//                    Log.e("jsonerr", "delete" + 23);
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
+                    }
+//                    Log.e("jsonerr", "delete" + 4);
+//                    Log.e("jsonerr", "delete" + 2);
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result){
+            }
+        }
+        deleteFoodJSON g = new deleteFoodJSON();
+        g.execute(url);
     }
 
 

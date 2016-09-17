@@ -15,7 +15,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class GridViewAdapter extends BaseAdapter
 {
@@ -37,6 +36,7 @@ public class GridViewAdapter extends BaseAdapter
         this.check = false;
 //        this.check = check;
     }
+
     public boolean getCheck() { return this.check; }
 
     public void setCheck(boolean bool) { this.check = bool; }
