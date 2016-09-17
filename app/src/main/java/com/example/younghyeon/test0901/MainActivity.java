@@ -669,20 +669,6 @@ public class MainActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
 
             if (i == 1) {
-//                gridView = (DynamicGridView) rootView.findViewById(R.id.dynamic_grid);
-//                gridViewAdapter = new DynamicGridViewAdapter(getActivity(), 4);
-//                gridView.setAdapter(gridViewAdapter);
-//
-//                //Active dragging mode when long click at each Grid view item
-//                gridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-//                    @Override
-//                    public boolean onItemLongClick(AdapterView parent, View view, int position, long id) {
-//                        gridView.startEditMode(position);
-//
-//                        return true;
-//                    }
-//                });
-
                 gridViewFreezer = (GridView) rootView.findViewById(R.id.gridView1);
 //                mAdapter1 = new GridViewAdapter(getActivity());
                 Log.e("Main", "GridView : hi");
@@ -691,6 +677,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                             long arg3) {
+                    }
+                });
+                gridViewFreezer.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        return false;
                     }
                 });
                 mAdapter1.notifyDataSetChanged();
@@ -706,6 +698,12 @@ public class MainActivity extends AppCompatActivity {
                                             long arg3) {
                     }
                 });
+                gridViewRefrigerator.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        return false;
+                    }
+                });
                 return rootView;
             } else if (i == 3) {
                 gridViewBasket = (GridView) rootView.findViewById(R.id.gridView1);
@@ -715,6 +713,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onItemClick(AdapterView<?> arg0, View arg1, int position,
                                             long arg3) {
+                    }
+                });
+                gridViewBasket.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                    @Override
+                    public boolean onItemLongClick(AdapterView<?> adapterView, View view, int i, long l) {
+                        return false;
                     }
                 });
                 return rootView;
