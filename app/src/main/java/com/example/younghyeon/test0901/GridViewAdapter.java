@@ -14,6 +14,8 @@ import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -91,6 +93,7 @@ public class GridViewAdapter extends BaseAdapter
     }
 
     public static class ViewHolder {
+        public TextView txtDDay;
         public ImageView imgViewFlag;
         public TextView txtViewTitle;
         public CheckBox checkBox;
@@ -106,6 +109,7 @@ public class GridViewAdapter extends BaseAdapter
             view = new ViewHolder();
             convertView = inflator.inflate(R.layout.gridview_row, null);
 
+            view.txtDDay = (TextView) convertView.findViewById(R.id.TextViewDDay);
             view.txtViewTitle = (TextView) convertView.findViewById(R.id.grid_text);
             view.imgViewFlag = (ImageView) convertView.findViewById(R.id.grid_image);
             view.checkBox = (CheckBox) convertView.findViewById(R.id.grid_checkbox);
@@ -116,6 +120,7 @@ public class GridViewAdapter extends BaseAdapter
         }
 
         final FoodItem curItem = (FoodItem) foodArrayList.get(position);
+        view.txtDDay.setText("D-" + curItem.getD_day());
         view.txtViewTitle.setText(curItem.getName());
         view.imgViewFlag.setImageResource(getDrawableId(curItem.getImage()));
 
