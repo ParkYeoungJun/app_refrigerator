@@ -72,6 +72,7 @@ public class MainActivity extends AppCompatActivity {
     boolean checkRemoveButtonVisibility = false;
     int i = 1;
     int state;
+
     ArrayList foodList1;
     ArrayList foodList2;
     ArrayList foodList3;
@@ -756,7 +757,6 @@ public class MainActivity extends AppCompatActivity {
             int image_num = intent.getIntExtra("image_num", 7);
             int position = intent.getIntExtra("position", 0);
             int d_day = intent.getIntExtra("d_day", 0);
-            int diff = intent.getIntExtra("diff", 0);
 
             Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
 
@@ -800,7 +800,6 @@ public class MainActivity extends AppCompatActivity {
 //                FoodItem f = (FoodItem) foodList1.get(view_index);
 //                Log.e("good", "foodList1 : " + f.getId() + ", "+ up_item.getId());
                 foodList1.set(view_index, up_item);
-
                 sortFoodArray(0);
                 mAdapter1.notifyDataSetChanged();
 
@@ -901,7 +900,10 @@ public class MainActivity extends AppCompatActivity {
                             mAdapter3.notifyDataSetChanged();
                         }
 
+                        sortFoodArray(_position);
+
                     }
+
 
 
 

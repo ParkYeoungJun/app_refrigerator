@@ -271,7 +271,7 @@ public class FoodUpdateActivity extends Activity {
                         intent.putExtra("num", num);
                         intent.putExtra("image_num", image_num);
                         intent.putExtra("position", position);
-                        intent.putExtra("d_day", diff);
+                        intent.putExtra("d_day", (int) diff);
 
 
                         setResult(RESULT_OK, intent);
