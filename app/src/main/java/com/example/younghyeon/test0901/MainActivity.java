@@ -21,6 +21,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
 
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -106,6 +109,14 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); // 앱 타이틀 제거
         setContentView(R.layout.activity_main);
+
+
+        FirebaseMessaging.getInstance().subscribeToTopic("news");
+        Log.e("good", "hi");
+        Log.e("good", "yes : " + FirebaseInstanceId.getInstance().getToken());
+        FirebaseInstanceId.getInstance().getToken();
+        Log.e("good", "bye");
+
 
         foodList1 = new ArrayList<FoodItem>();
         foodList2 = new ArrayList<FoodItem>();
@@ -745,10 +756,12 @@ public class MainActivity extends AppCompatActivity {
             int image_num = intent.getIntExtra("image_num", 7);
             int position = intent.getIntExtra("position", 0);
             int d_day = intent.getIntExtra("d_day", 0);
+            int diff = intent.getIntExtra("diff", 0);
 
             Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
 
             item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
+//            item.setD_day(diff);
             getMaxId("http://52.78.88.182/getMaxFoodId.php");
         }
         else if(requestCode == REQUEST_CODE_FOOD_UPDATE)
@@ -989,7 +1002,9 @@ public class MainActivity extends AppCompatActivity {
                         mAdapter1.foodArrayList = foodList1;
                     }
 //
+//                    Log.e("good", "tmp_itme's diff : " + tmp_item.getD_day());
                     foodList1.add(tmp_item);
+
 //                    mAdapter1.foodArrayList = foodList1;
 //                    mAdapter1.notifyDataSetChanged();
 //                    Log.e("good", "item id : " + item.getId());

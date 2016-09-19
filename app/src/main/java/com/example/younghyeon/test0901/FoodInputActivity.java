@@ -336,7 +336,7 @@ public class FoodInputActivity extends Activity {
                     Log.e("jsonerr", "write_json2 : " + jsonObj.toString());
 
                     String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonObj.toString();
-
+                    Log.e("jsonerr", "data : " + data);
                     OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
                     Log.e("jsonerr", "write_json3 : " + jsonObj.toString());
 //                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령

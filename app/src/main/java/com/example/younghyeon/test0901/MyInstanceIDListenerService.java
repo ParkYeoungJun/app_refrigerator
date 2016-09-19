@@ -1,16 +1,51 @@
 package com.example.younghyeon.test0901;
 
+import android.util.Log;
+
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.FirebaseInstanceIdService;
 
-/**
- * Created by hoont on 2016-09-17.
- */
+import java.io.IOException;
+
+import okhttp3.FormBody;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+
 public class MyInstanceIDListenerService extends FirebaseInstanceIdService {
 
+    private static final String TAG = "MyFirebaseIIDService";
+
+    // [START refresh_token]
     @Override
     public void onTokenRefresh() {
-        String refreshedToken = FirebaseInstanceId.getInstance().getToken();
-        // 이 token을 서버에 전달 한다.
+        // Get updated InstanceID token.
+        String token = FirebaseInstanceId.getInstance().getToken();
+        Log.e("good", "Refreshed token: " + token);
+
+        // TODO: Implement this method to send any registration to your app's servers.
+        sendRegistrationToServer(token);
+    }
+
+    private void sendRegistrationToServer(String token) {
+        // Add custom implementation, as needed.
+
+        OkHttpClient client = new OkHttpClient();
+        RequestBody body = new FormBody.Builder()
+                .add("Token", token)
+                .build();
+
+        //request
+        Request request = new Request.Builder()
+                .url("http://서버주소/fcm/register.php")
+                .post(body)
+                .build();
+
+        try {
+            client.newCall(request).execute();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }
