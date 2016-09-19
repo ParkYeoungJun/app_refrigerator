@@ -88,6 +88,10 @@ public class FoodUpdateActivity extends Activity {
         {
             shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
         }
+        else
+        {
+            shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
+        }
 
         inputTitle = (TextView) findViewById(R.id.inputTitle);
         inputTitle.setText("식품 수정");
