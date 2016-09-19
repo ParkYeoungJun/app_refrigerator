@@ -20,6 +20,7 @@ import android.view.Window;
 import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageButton;
+import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.messaging.FirebaseMessaging;
@@ -204,6 +205,7 @@ public class MainActivity extends AppCompatActivity {
                                     foodList1.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
+
                                 mAdapter1.setCheck(false);
                             }
                             if(i==0) {
@@ -212,6 +214,8 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 sortFoodArray(2);
                             }
+                            if(tempArraySize > 0)
+                                Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
                             mAdapter3.notifyDataSetChanged();
@@ -261,7 +265,8 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 sortFoodArray(2);
                             }
-
+                            if(tempArraySize > 0)
+                                Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
                             mAdapter3.notifyDataSetChanged();
@@ -309,7 +314,8 @@ public class MainActivity extends AppCompatActivity {
                             else {
                                 sortFoodArray(1);
                             }
-
+                            if(tempArraySize > 0)
+                                Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
                             mAdapter3.notifyDataSetChanged();
@@ -763,6 +769,7 @@ public class MainActivity extends AppCompatActivity {
             item = new FoodItem(group, name, purDate, shelfLife, d_day, image_num, num, position);
 //            item.setD_day(diff);
             getMaxId("http://52.78.88.182/getMaxFoodId.php");
+            Toast.makeText(getApplicationContext(), "추가되었습니다.", Toast.LENGTH_SHORT).show();
         }
         else if(requestCode == REQUEST_CODE_FOOD_UPDATE)
         {
@@ -818,6 +825,7 @@ public class MainActivity extends AppCompatActivity {
                 sortFoodArray(2);
                 mAdapter3.notifyDataSetChanged();
             }
+            Toast.makeText(getApplicationContext(), "수정되었습니다.", Toast.LENGTH_SHORT).show();
         }
     }
 
