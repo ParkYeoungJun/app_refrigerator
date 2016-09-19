@@ -70,6 +70,10 @@ public class FoodInputActivity extends Activity {
         {
             shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
         }
+        else
+        {
+            shelfStrArr = getResources().getStringArray(R.array.spinnerArrayShelfLife1);
+        }
 
         image_num = 0;
         shelf_index1 = 0;

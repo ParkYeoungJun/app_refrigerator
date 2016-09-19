@@ -28,22 +28,23 @@
     <ImageView
         android:layout_height="64dp"
         android:id="@+id/grid_image"
-        android:layout_width="30dp"
+        android:layout_width="56dp"
         android:src="@drawable/icon"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"/>
+        android:layout_alignParentTop="false"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="12dp" />
 
     <TextView
         android:text="TextView"
         android:layout_height="wrap_content"
         android:id="@+id/grid_text"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/grid_image"
-        android:layout_marginTop="2dp"
-        android:layout_centerHorizontal="true"
         android:maxLines="1"
         android:textSize="15dp"
-        android:ellipsize="marquee">
+        android:ellipsize="marquee"
+        android:layout_below="@+id/grid_image"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="-6dp">
     </TextView>
 
 </RelativeLayout>
