@@ -146,7 +146,8 @@ public class MainActivity extends AppCompatActivity {
         homeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                //
+                Intent intent = new Intent(MainActivity.this, GraphActivity.class);
+                startActivity(intent);
             }
         });
 
