@@ -97,6 +97,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton moveButton;
     ImageButton orderButton;
     ImageButton cancelButton;
+    ImageButton homeButton;
 
     String myJSON;
 
@@ -140,6 +141,15 @@ public class MainActivity extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3); // 페이지 저장 3개까지
+
+        homeButton = (ImageButton) findViewById(R.id.homeButton);
+        homeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //
+            }
+        });
+
 
         orderButton = (ImageButton) findViewById(R.id.orderBtn);
         orderButton.setOnClickListener(new View.OnClickListener() {
