@@ -774,7 +774,7 @@ public class MainActivity extends AppCompatActivity {
             int num = intent.getIntExtra("num", 0);
             int image_num = intent.getIntExtra("image_num", 7);
             int position = intent.getIntExtra("position", 0);
-            int d_day = intent.getIntExtra("d_day", 0);
+            int d_day = intent.getIntExtra("d_day", 1);
 
             Log.e("good", group + ", " + name + ", " + purDate + ", " + shelfLife + ", " + num + ", " + d_day);
 

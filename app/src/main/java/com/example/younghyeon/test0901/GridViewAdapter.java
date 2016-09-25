@@ -132,6 +132,8 @@ public class GridViewAdapter extends BaseAdapter
             {
                 view.txtDDay.setTextColor(Color.BLUE);
             }
+            else
+                view.txtDDay.setTextColor(Color.BLACK);
         }
         else {
             view.txtDDay.setText("D+" + Math.abs(cur_dDay));
