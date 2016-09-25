@@ -97,7 +97,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton moveButton;
     ImageButton orderButton;
     ImageButton cancelButton;
-    ImageButton homeButton;
+    ImageButton graphButton;
 
     String myJSON;
 
@@ -142,8 +142,8 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3); // 페이지 저장 3개까지
 
-        homeButton = (ImageButton) findViewById(R.id.homeButton);
-        homeButton.setOnClickListener(new View.OnClickListener() {
+        graphButton = (ImageButton) findViewById(R.id.graphButton);
+        graphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, GraphActivity.class);
@@ -356,6 +356,7 @@ public class MainActivity extends AppCompatActivity {
                                 int tempArraySize = 0;
                                 int cnt = 0;
                                 if (mAdapter1.getCheck() == true) {
+                                    Log.e("good", ""+mAdapter1.getCheckedPosition());
                                     int[] tempArray = mAdapter1.getCheckedPosition();
                                     tempArraySize = tempArray[0];
                                     for (int i = 1; i <= tempArraySize; i++) {

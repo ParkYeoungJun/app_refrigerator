@@ -6,6 +6,7 @@ package com.example.younghyeon.test0901;
 
 import android.app.Activity;
 import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -43,7 +44,12 @@ public class GridViewAdapter extends BaseAdapter
     public void setCheck(boolean bool) { this.check = bool; }
 
     public int[] getCheckedPosition() {
-        int[] tempArray = new int[foodArrayList.size()];
+        Log.e("good", "흠");
+
+
+
+        int[] tempArray = new int[foodArrayList.size()+1];
+        Log.e("good", "흠2");
         int index = 1;
         int cnt = 0;
         for (int i = 0; i < foodArrayList.size(); i++){

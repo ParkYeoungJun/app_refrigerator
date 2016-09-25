@@ -5,6 +5,8 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.widget.ImageButton;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -31,9 +33,9 @@ import java.util.List;
  * Created by hoont on 2016-09-21.
  */
 
-
 public class GraphActivity extends Activity {
     private static final String TAG_RESULTS="result";
+
 
     String myJSON;
     String[] dateStrArr = new String[7];
@@ -48,6 +50,8 @@ public class GraphActivity extends Activity {
     public static SimpleDateFormat simle_timeFormat = new SimpleDateFormat("MM.dd");
 
     List<Entry> entries = new ArrayList<Entry>();
+
+    ImageButton backButton;
     LineChart chart;
 
     @Override
@@ -59,6 +63,13 @@ public class GraphActivity extends Activity {
             sum_second[i] = 0;
 
         chart = (LineChart) findViewById(R.id.chart);
+        backButton = (ImageButton) findViewById(R.id.backButton2);
+        backButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         getSecond("http://52.78.88.182/getSecond.php");
 
 //        //임시
