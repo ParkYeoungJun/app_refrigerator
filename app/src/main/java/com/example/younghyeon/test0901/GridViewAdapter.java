@@ -137,6 +137,9 @@ public class GridViewAdapter extends BaseAdapter
             view.txtDDay.setText("D+" + Math.abs(cur_dDay));
             view.txtDDay.setTextColor(Color.RED);
         }
+        if (curItem.getPosition() == 2) {
+            view.txtDDay.setVisibility(View.INVISIBLE);
+        }
         view.txtViewTitle.setText(curItem.getName());
         view.imgViewFlag.setImageResource(getDrawableId(curItem.getImage()));
 
