@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="135dp"
+    android:background="#F361A6"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:id="@+id/projectPicture"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:background="@drawable/delete_button"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="3dp"
+        android:textColor="#FFFFFF"
+        android:text="쀼쀼쀼"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/graphButton2"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:background="@drawable/graph_button2"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="3dp"
+        android:textColor="#FFFFFF"
+        android:text="그래프 출력"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/orderButton2"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:background="@drawable/order_name2"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="5dp"
+        android:textColor="#FFFFFF"
+        android:text="정렬"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <ImageButton
+        android:id="@+id/cameraButton2"
+        android:layout_marginTop="25dp"
+        android:layout_gravity="center"
+        android:background="@drawable/camera_button3"
+        android:layout_width="60dp"
+        android:layout_height="60dp" />
+
+    <TextView
+        android:layout_marginTop="3dp"
+        android:textColor="#FFFFFF"
+        android:text="영수증 촬영"
+        android:textSize="14dp"
+        android:layout_gravity="center"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+</LinearLayout>

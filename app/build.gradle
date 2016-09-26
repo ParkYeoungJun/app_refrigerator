@@ -37,6 +37,7 @@ dependencies {
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.0-beta1'
     // OCR
     compile project(':libraries:tess-two')
+    compile project(':libraries:library')
 }
 apply plugin: 'com.google.gms.google-services'
 

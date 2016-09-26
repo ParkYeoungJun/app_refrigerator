@@ -57,6 +57,7 @@ import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 import com.googlecode.tesseract.android.TessBaseAPI;
+import com.jeremyfeinstein.slidingmenu.lib.SlidingMenu;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -135,6 +136,7 @@ public class MainActivity extends AppCompatActivity {
     ImageButton orderButton;
     ImageButton cancelButton;
     ImageButton graphButton;
+    ImageButton menuButton;
     ImageButton cameraButton;
 
     String myJSON;
@@ -151,6 +153,14 @@ public class MainActivity extends AppCompatActivity {
         supportRequestWindowFeature(Window.FEATURE_NO_TITLE); // 앱 타이틀 제거
         setContentView(R.layout.activity_main);
 
+        final SlidingMenu menu = new SlidingMenu(this);
+        menu.setMode(SlidingMenu.LEFT);
+        menu.setShadowWidthRes(R.dimen.shadow_width);
+//        menu.setTouchModeAbove(SlidingMenu.TOUCHMODE_FULLSCREEN);
+        menu.setBehindOffsetRes(R.dimen.slidingmenu_offset);
+        menu.setFadeDegree(0.35f);
+        menu.attachToActivity(MainActivity.this, SlidingMenu.SLIDING_CONTENT);
+        menu.setMenu(R.layout.activity_menu);
 
         FirebaseMessaging.getInstance().subscribeToTopic("news");
         Log.e("good", "hi");
@@ -182,7 +192,7 @@ public class MainActivity extends AppCompatActivity {
         mViewPager.setAdapter(mSectionsPagerAdapter);
         mViewPager.setOffscreenPageLimit(3); // 페이지 저장 3개까지
 
-        graphButton = (ImageButton) findViewById(R.id.graphButton);
+        graphButton = (ImageButton) findViewById(R.id.graphButton2);
         graphButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -191,19 +201,26 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        menuButton = (ImageButton) findViewById(R.id.menuButton);
+        menuButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                menu.showMenu();
+            }
+        });
 
-        orderButton = (ImageButton) findViewById(R.id.orderBtn);
+        orderButton = (ImageButton) findViewById(R.id.orderButton2);
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 if(!isShelfOder) {
                     isShelfOder = true;
 
-                    orderButton.setBackgroundResource(R.drawable.order_name);
+                    orderButton.setBackgroundResource(R.drawable.order_name2);
                 }
                 else {
                     isShelfOder = false;
-                    orderButton.setBackgroundResource(R.drawable.order_shelf);
+                    orderButton.setBackgroundResource(R.drawable.order_shelf2);
                 }
 
                 sortFoodArray(0);
@@ -215,7 +232,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        cameraButton = (ImageButton) findViewById(R.id.cameraButton);
+        cameraButton = (ImageButton) findViewById(R.id.cameraButton2);
         cameraButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {

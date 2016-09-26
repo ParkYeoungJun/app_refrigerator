@@ -16,7 +16,7 @@
             android:textColor="@android:color/white"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
+<!--
         <ImageButton
             android:id="@+id/graphButton"
             android:layout_marginTop="10dp"
@@ -36,6 +36,7 @@
             android:layout_toRightOf="@+id/graphButton"
             android:background="@drawable/order_name"/>
 
+
         <ImageButton
             android:id="@+id/cameraButton"
             android:layout_marginTop="8dp"
@@ -45,6 +46,7 @@
             android:layout_toRightOf="@+id/orderBtn"
             android:layout_width="33dp"
             android:layout_height="33dp" />
+            -->
 
         <ImageButton
             android:id="@+id/moveButton"
@@ -60,6 +62,17 @@
             android:layout_marginLeft="5dp"
             android:layout_toLeftOf="@+id/cancelButton"
             android:background="@drawable/trash_button2"
+            android:layout_width="38dp"
+            android:layout_height="38dp" />
+
+        <ImageButton
+            android:background="@drawable/menu_button"
+            android:layout_alignParentLeft="true"
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_marginBottom="10dp"
+            android:id="@+id/menuButton"
             android:layout_width="38dp"
             android:layout_height="38dp" />
 
