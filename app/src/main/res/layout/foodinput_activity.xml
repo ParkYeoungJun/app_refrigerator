@@ -17,13 +17,14 @@
             android:text="식품 추가"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content" />
-
+<!--
         <ImageButton
             android:id="@+id/camera_button"
             android:background="@drawable/camera_button"
             android:layout_alignParentRight="true"
             android:layout_width="45dp"
             android:layout_height="45dp" />
+            -->
     </RelativeLayout>
 
     <LinearLayout

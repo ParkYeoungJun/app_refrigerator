@@ -19,12 +19,12 @@
 
         <ImageButton
             android:id="@+id/graphButton"
-            android:layout_marginTop="5dp"
-            android:layout_marginLeft="5dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginLeft="10dp"
             android:layout_alignParentLeft="true"
-            android:layout_marginBottom="5dp"
-            android:layout_width="38dp"
-            android:layout_height="38dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="33dp"
+            android:layout_height="33dp"
             android:background="@drawable/graph_button"/>
 
         <ImageButton
@@ -35,6 +35,16 @@
             android:id="@+id/orderBtn"
             android:layout_toRightOf="@+id/graphButton"
             android:background="@drawable/order_name"/>
+
+        <ImageButton
+            android:id="@+id/cameraButton"
+            android:layout_marginTop="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/camera_button2"
+            android:layout_toRightOf="@+id/orderBtn"
+            android:layout_width="33dp"
+            android:layout_height="33dp" />
 
         <ImageButton
             android:id="@+id/moveButton"
