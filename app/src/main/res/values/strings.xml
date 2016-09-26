@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MY FRIDGE</string>
+    <string name="app_name">IoH 냉장고</string>
 
     <string name="title_section1">냉동실</string>
     <string name="title_section2">냉장실</string>
