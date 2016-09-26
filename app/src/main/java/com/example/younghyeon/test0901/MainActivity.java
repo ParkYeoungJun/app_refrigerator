@@ -26,6 +26,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.AdapterView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.GridView;
@@ -40,14 +41,17 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLEncoder;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -213,12 +217,11 @@ public class MainActivity extends AppCompatActivity {
         orderButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(!isShelfOder) {
+                if (!isShelfOder) {
                     isShelfOder = true;
 
                     orderButton.setBackgroundResource(R.drawable.order_name2);
-                }
-                else {
+                } else {
                     isShelfOder = false;
                     orderButton.setBackgroundResource(R.drawable.order_shelf2);
                 }
@@ -259,38 +262,35 @@ public class MainActivity extends AppCompatActivity {
                             int tempArraySize = 0;
                             int cnt = 0;
                             int mov_pos;
-                            if(i==0) {
+                            if (i == 0) {
                                 mov_pos = 1;
-                            }
-                            else {
+                            } else {
                                 mov_pos = 2;
                             }
 
-                            if (mAdapter1.getCheck() == true)
-                            {
+                            if (mAdapter1.getCheck() == true) {
                                 int[] tempArray = mAdapter1.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
                                     FoodItem movItem = (FoodItem) foodList1.get(tempArray[j] + cnt);
-                                    if(i==0)
+                                    if (i == 0)
                                         foodList2.add(movItem);
                                     else
                                         foodList3.add(movItem);
-                                    Log.e("good", "movItem id! : "+movItem.getId());
-                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
+                                    Log.e("good", "movItem id! : " + movItem.getId());
+                                    moveFood("http://52.78.88.182/moveFood1.php?id=" + movItem.getId() + "&position=" + mov_pos);
                                     foodList1.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
 
                                 mAdapter1.setCheck(false);
                             }
-                            if(i==0) {
+                            if (i == 0) {
                                 sortFoodArray(1);
-                            }
-                            else {
+                            } else {
                                 sortFoodArray(2);
                             }
-                            if(tempArraySize > 0)
+                            if (tempArraySize > 0)
                                 Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
@@ -302,46 +302,42 @@ public class MainActivity extends AppCompatActivity {
                     builder.create();
                     builder.show();
 
-                }
-                else if (state == STATE_REFRIGERATOR) {
+                } else if (state == STATE_REFRIGERATOR) {
                     final CharSequence[] items = {"냉동실로 이동", "장바구니로 이동"};
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
 //                            Log.e("good", "장바구니");
                             int mov_pos;
-                            if(i==0) {
+                            if (i == 0) {
                                 mov_pos = 0;
-                            }
-                            else {
+                            } else {
                                 mov_pos = 2;
                             }
                             int tempArraySize = 0;
                             int cnt = 0;
-                            if (mAdapter2.getCheck() == true)
-                            {
+                            if (mAdapter2.getCheck() == true) {
                                 int[] tempArray = mAdapter2.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
                                     FoodItem movItem = (FoodItem) foodList2.get(tempArray[j] + cnt);
 
-                                    if(i==0)
+                                    if (i == 0)
                                         foodList1.add(movItem);
                                     else
                                         foodList3.add(movItem);
-                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
+                                    moveFood("http://52.78.88.182/moveFood1.php?id=" + movItem.getId() + "&position=" + mov_pos);
                                     foodList2.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
                                 mAdapter2.setCheck(false);
                             }
-                            if(i==0) {
+                            if (i == 0) {
                                 sortFoodArray(0);
-                            }
-                            else {
+                            } else {
                                 sortFoodArray(2);
                             }
-                            if(tempArraySize > 0)
+                            if (tempArraySize > 0)
                                 Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
@@ -351,46 +347,42 @@ public class MainActivity extends AppCompatActivity {
                     });
                     builder.create();
                     builder.show();
-                }
-                else if (state == STATE_BASKET) {
+                } else if (state == STATE_BASKET) {
                     final CharSequence[] items = {"냉동실로 이동", "냉장실로 이동"};
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialogInterface, int i) {
                             Log.e("good", "장바구니");
                             int mov_pos;
-                            if(i==0) {
+                            if (i == 0) {
                                 mov_pos = 0;
-                            }
-                            else {
+                            } else {
                                 mov_pos = 1;
                             }
                             int tempArraySize = 0;
                             int cnt = 0;
-                            if (mAdapter3.getCheck() == true)
-                            {
+                            if (mAdapter3.getCheck() == true) {
                                 int[] tempArray = mAdapter3.getCheckedPosition();
                                 tempArraySize = tempArray[0];
                                 for (int j = 1; j <= tempArraySize; j++) {
                                     FoodItem movItem = (FoodItem) foodList3.get(tempArray[j] + cnt);
 
-                                    if(i==0)
+                                    if (i == 0)
                                         foodList1.add(movItem);
                                     else
                                         foodList2.add(movItem);
-                                    moveFood("http://52.78.88.182/moveFood1.php?id="+ movItem.getId()+"&position="+mov_pos);
+                                    moveFood("http://52.78.88.182/moveFood1.php?id=" + movItem.getId() + "&position=" + mov_pos);
                                     foodList3.remove(tempArray[j] + cnt);
                                     cnt--;
                                 }
                                 mAdapter3.setCheck(false);
                             }
-                            if(i==0) {
+                            if (i == 0) {
                                 sortFoodArray(0);
-                            }
-                            else {
+                            } else {
                                 sortFoodArray(1);
                             }
-                            if(tempArraySize > 0)
+                            if (tempArraySize > 0)
                                 Toast.makeText(getApplicationContext(), "이동되었습니다.", Toast.LENGTH_SHORT).show();
                             mAdapter1.notifyDataSetChanged();
                             mAdapter2.notifyDataSetChanged();
@@ -421,7 +413,7 @@ public class MainActivity extends AppCompatActivity {
                                 int tempArraySize = 0;
                                 int cnt = 0;
                                 if (mAdapter1.getCheck() == true) {
-                                    Log.e("good", ""+mAdapter1.getCheckedPosition());
+                                    Log.e("good", "" + mAdapter1.getCheckedPosition());
                                     int[] tempArray = mAdapter1.getCheckedPosition();
                                     tempArraySize = tempArray[0];
                                     for (int i = 1; i <= tempArraySize; i++) {
@@ -433,9 +425,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     mAdapter1.setCheck(false);
                                     mAdapter1.notifyDataSetChanged();
-                                }
-                                else if (mAdapter2.getCheck() == true)
-                                {
+                                } else if (mAdapter2.getCheck() == true) {
                                     int[] tempArray = mAdapter2.getCheckedPosition();
                                     tempArraySize = tempArray[0];
                                     for (int i = 1; i <= tempArraySize; i++) {
@@ -448,9 +438,7 @@ public class MainActivity extends AppCompatActivity {
                                     }
                                     mAdapter2.setCheck(false);
                                     mAdapter2.notifyDataSetChanged();
-                                }
-                                else if (mAdapter3.getCheck() == true)
-                                {
+                                } else if (mAdapter3.getCheck() == true) {
                                     int[] tempArray = mAdapter3.getCheckedPosition();
                                     tempArraySize = tempArray[0];
                                     for (int i = 1; i <= tempArraySize; i++) {
@@ -637,16 +625,11 @@ public class MainActivity extends AppCompatActivity {
         compareFoodList.add("오징어");
         compareFoodList.add("버섯");
         compareFoodList.add("송편");
-        compareFoodList.add("소");
         compareFoodList.add("사과");
         compareFoodList.add("순대");
         compareFoodList.add("송편");
-        compareFoodList.add("블루");
-        compareFoodList.add("부침");
         compareFoodList.add("시금치");
         compareFoodList.add("방울토마토");
-        compareFoodList.add("부침");
-        compareFoodList.add("안성 탕면");
         compareFoodList.add("소면");
         compareFoodList.add("열무");
         compareFoodList.add("얼갈이");
@@ -825,9 +808,39 @@ public class MainActivity extends AppCompatActivity {
                 resArrayList.add(compareFoodList.get(i).toString());
             }
         }
+        String tmpResult = "";
         for (int i = 0; i < resArrayList.size(); i++) {
+            if(i != 0)
+                tmpResult += ", ";
             Log.e("check","res : "+resArrayList.get(i));
+            tmpResult += resArrayList.get(i).toString();
         }
+
+        AlertDialog.Builder alert_confirm = new AlertDialog.Builder(MainActivity.this);
+        alert_confirm.setMessage(tmpResult+"\n인식되었습니다. 추가 하시겠습니까?").setCancelable(false).setPositiveButton("확인",
+                new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        insertOcr("http://52.78.88.182/insertOcr.php");
+
+                            Log.e("jsonerr", "Yes");
+
+                    }
+                }
+
+        ).
+
+                    setNegativeButton("취소",
+                                              new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick (DialogInterface dialog,int which){
+                            Log.e("jsonerr", "No");
+                            return;
+                        }
+                });
+        AlertDialog alert = alert_confirm.create();
+        alert.show();
+
 
         tempStr = "";
 
@@ -1471,5 +1484,186 @@ public class MainActivity extends AppCompatActivity {
         }
 
     }
+
+
+    public void insertOcr(String url){
+        class insertOcrJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+                try {
+                    String uri = params[0];
+                    JSONArray jsonArray = new JSONArray();
+                    Calendar c = Calendar.getInstance();
+                    String dateStr = timeFormat.format(c.getTime());
+                    c.add(Calendar.DATE, 7);
+                    String shelfStr = timeFormat.format(c.getTime());
+
+                    for(int i = 0; i < resArrayList.size(); i++)
+                    {
+                        JSONObject jsonObj = new JSONObject();
+                        jsonObj.put("group", "기타");
+                        jsonObj.put("name", resArrayList.get(i));
+                        jsonObj.put("purchase_date", dateStr);
+                        jsonObj.put("image_num", 7);
+                        jsonObj.put("shelf_life", shelfStr);
+                        jsonObj.put("num", 1);
+                        jsonObj.put("position", 1);
+                        jsonArray.put(jsonObj);
+                    }
+
+
+
+
+                    BufferedWriter bufferedWriter = null;
+//                BufferedReader bufferedReader = null;
+                    Log.e("jsonerr", "write_json0 : " + jsonArray.toString());
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+                    Log.e("jsonerr", "write_json1 : " + jsonArray.toString());
+                    con.setDoOutput(true);
+                    con.setDoInput(true);
+                    Log.e("jsonerr", "write_json2 : " + jsonArray.toString());
+
+                    String data ="&" + URLEncoder.encode("data", "UTF-8") + "="+ jsonArray.toString();
+                    Log.e("jsonerr", "data : " + data);
+                    OutputStreamWriter wr = new OutputStreamWriter(con.getOutputStream());
+                    Log.e("jsonerr", "write_json3 : " + jsonArray.toString());
+//                    wr.write(jsonObj.toString());//onPreExecute 메소드의 data 변수의 파라미터 내용을 POST 전송명령
+                    wr.write(data);
+//                    Log.e("jsonerr", "write() : ");
+
+                    wr.flush();
+
+                    //OutputStream os = con.getOutputStream();
+                    Log.e("jsonerr", "write_json6 : " + jsonArray.toString());
+                    //BufferedWriter writer = new BufferedWriter(
+                    //      new OutputStreamWriter(os, "UTF-8"));
+                    Log.e("jsonerr", "write_json2 : " + jsonArray.toString());
+                    //os.write(jsonObj.toString().getBytes());
+
+//                    bufferedWriter = new BufferedWriter(new OutputStreamWriter(con.getOutputStream()));
+//                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+//                    bufferedWriter.write(jsonObj);
+                    //bufferedWriter.write(jsonObj.toString());
+                    Log.e("jsonerr", "write_json3 : " + jsonArray.toString());
+//                    String json;
+//                    while((json = bufferedReader.readLine())!= null){
+//                        sb.append(json+"\n");
+//                    }
+                    Log.e("jsonerr", "before read");
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    Log.e("jsonerr", "ing read");
+                    String line=null;
+                    Log.e("jsonerr", "ing read");
+                    while((line=reader.readLine())!=null){
+                        //서버응답값을 String 형태로 추가함
+                        Log.e("jsonerr", "Input Read : " + line+"\n");
+                    }
+                    Log.e("jsonerr", "after read");
+
+
+                    getMaxOrc("http://52.78.88.182/getMaxOrc.php");
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+
+            @Override
+            protected void onPostExecute(String result){
+                Log.e("jsonerr", "result : "+ result);
+//                myJSON=result;
+//                showList();
+            }
+        }
+        insertOcrJSON g = new insertOcrJSON();
+        g.execute(url);
+    }
+
+    public void getMaxOrc(String url){
+        class getMaxOrcJSON extends AsyncTask<String, Void, String> {
+
+            @Override
+            protected String doInBackground(String... params) {
+
+                String uri = params[0];
+
+                BufferedReader bufferedReader = null;
+                try {
+                    URL url = new URL(uri);
+                    HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                    StringBuilder sb = new StringBuilder();
+
+                    bufferedReader = new BufferedReader(new InputStreamReader(con.getInputStream()));
+
+                    String json;
+                    while((json = bufferedReader.readLine())!= null){
+                        sb.append(json+"\n");
+                    }
+
+                    return sb.toString().trim();
+
+                }catch(Exception e){
+                    return null;
+                }
+            }
+
+            @Override
+            protected void onPostExecute(String result){
+                myJSON = result;
+                JSONArray items_jarr = null;
+                try {
+                    JSONObject jsonObj = new JSONObject(myJSON);
+                    items_jarr = jsonObj.getJSONArray(TAG_RESULTS);
+
+                    for(int i=0; i < items_jarr.length();i++)
+                    {
+                        JSONObject c = items_jarr.getJSONObject(i);
+                        int maxId = c.getInt(TAG_ID);
+                        int _position = c.getInt("position");
+                        Log.e("good", "string id : "+ maxId);
+
+
+                        if (foodList2 == null){
+//                                foodList2 = new ArrayList<FoodItem>();
+                            mAdapter2.foodArrayList = foodList2;
+                        }
+                        Calendar cal = Calendar.getInstance();
+                        String dateStr = timeFormat.format(cal.getTime());
+                        cal.add(Calendar.DATE, 7);
+                        String shelfStr = timeFormat.format(cal.getTime());
+
+                        for(int j = 0; j < resArrayList.size(); j++)
+                        {
+                            FoodItem tmp_food = new FoodItem("기타", resArrayList.get(j).toString(), dateStr, shelfStr, 7, 7, 1, 1);
+                            tmp_food.setId(maxId - resArrayList.size() + j - 1);
+                            foodList2.add(tmp_food);
+                        }
+
+                        mAdapter2.notifyDataSetChanged();
+                        sortFoodArray(1);
+
+                    }
+
+
+
+
+                } catch (JSONException e) {
+                    Log.e("JSON Parser", "Error parsing data [" + e.getMessage()+"] "+myJSON);
+                    e.printStackTrace();
+                }
+
+            }
+        }
+        getMaxOrcJSON g = new getMaxOrcJSON();
+        g.execute(url);
+    }
+
 
 }
