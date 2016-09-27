@@ -8,7 +8,7 @@
         android:id="@+id/projectPicture"
         android:layout_marginTop="25dp"
         android:layout_gravity="center"
-        android:background="@drawable/delete_button"
+        android:background="@drawable/icon"
         android:layout_width="60dp"
         android:layout_height="60dp" />
 

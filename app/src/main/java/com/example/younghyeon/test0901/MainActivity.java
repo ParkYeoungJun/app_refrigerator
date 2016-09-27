@@ -865,6 +865,7 @@ public class MainActivity extends AppCompatActivity {
         mAdapter2.notifyDataSetChanged();
         mAdapter3.setCheck(false);
         mAdapter3.notifyDataSetChanged();
+        orderButton.setClickable(true);
     }
 
     public void setVisibleToCheckOn(){
